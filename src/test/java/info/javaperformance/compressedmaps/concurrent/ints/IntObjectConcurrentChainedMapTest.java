@@ -19,13 +19,13 @@
 
 package info.javaperformance.compressedmaps.concurrent.ints;
 
+import java.nio.charset.Charset;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import info.javaperformance.compressedmaps.IntMapFactory;
 import info.javaperformance.serializers.GenericStringSerializer;
 import junit.framework.TestCase;
-
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 public class IntObjectConcurrentChainedMapTest extends TestCase
 {
@@ -41,7 +41,7 @@ public class IntObjectConcurrentChainedMapTest extends TestCase
 
     protected IIntObjectConcurrentMap<String> getMap( final int size, final float ff )
     {
-        return IntMapFactory.concurrentIntObjectMap( size, ff, new GenericStringSerializer( StandardCharsets.UTF_8 ) );
+        return IntMapFactory.concurrentIntObjectMap( size, ff, new GenericStringSerializer( Charset.forName("UTF-8") ) );
     }
 
     /*

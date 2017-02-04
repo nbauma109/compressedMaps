@@ -19,13 +19,13 @@
 
 package info.javaperformance.compressedmaps.concurrent.doubles;
 
+import java.nio.charset.Charset;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import info.javaperformance.compressedmaps.DoubleMapFactory;
 import info.javaperformance.serializers.GenericStringSerializer;
 import junit.framework.TestCase;
-
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 public class DoubleObjectConcurrentChainedMapTest extends TestCase
 {
@@ -41,7 +41,7 @@ public class DoubleObjectConcurrentChainedMapTest extends TestCase
 
     protected IDoubleObjectConcurrentMap<String> getMap( final int size, final float ff )
     {
-        return DoubleMapFactory.concurrentDoubleObjectMap( size, ff, new GenericStringSerializer( StandardCharsets.UTF_8 ) );
+        return DoubleMapFactory.concurrentDoubleObjectMap( size, ff, new GenericStringSerializer( Charset.forName("UTF-8") ) );
     }
 
     /*

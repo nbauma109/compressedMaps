@@ -19,12 +19,12 @@
 
 package info.javaperformance.compressedmaps.normal.longs;
 
-import info.javaperformance.compressedmaps.LongMapFactory;
-import junit.framework.TestCase;
 import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
+
+import info.javaperformance.compressedmaps.LongMapFactory;
+import junit.framework.TestCase;
 
 public class LongFloatChainedMapTest extends TestCase
 {
@@ -134,10 +134,10 @@ public class LongFloatChainedMapTest extends TestCase
 
     private void testPutRandom( final float fillFactor )
     {
-        final int seed = ThreadLocalRandom.current().nextInt();
+        final long seed = System.currentTimeMillis();
         System.out.println( "testPutRandom: ff = " + fillFactor + ", seed = " + seed);
         final Random r = new Random( seed );
-        final Set<Long> set = new LinkedHashSet<>( SIZE );
+        final Set<Long> set = new LinkedHashSet<Long>( SIZE );
         final long[] vals = new long[ SIZE ];
         while ( set.size() < SIZE )
             set.add( r.nextLong() );
@@ -201,7 +201,7 @@ public class LongFloatChainedMapTest extends TestCase
     {
         final Random r = new Random( 1 );
         final float[] values = new float[ SIZE ];
-        Set<Long> ks = new LinkedHashSet<>( SIZE );
+        Set<Long> ks = new LinkedHashSet<Long>( SIZE );
         while ( ks.size() < SIZE )
             ks.add( r.nextLong() );
         final Long[] keys = ks.toArray( new Long[ SIZE ] );

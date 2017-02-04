@@ -19,25 +19,31 @@
 
 package info.javaperformance.compressedmaps.concurrent.ints;
 
+import static info.javaperformance.buckets.LongBucketEncoding.EMPTY;
+import static info.javaperformance.buckets.LongBucketEncoding.MAX_ENCODED_LENGTH;
+import static info.javaperformance.buckets.LongBucketEncoding.RELOCATED;
+import static info.javaperformance.buckets.LongBucketEncoding.getBlockIndex;
+import static info.javaperformance.buckets.LongBucketEncoding.getBlockLength;
+import static info.javaperformance.buckets.LongBucketEncoding.getOffset;
+import static info.javaperformance.buckets.LongBucketEncoding.pack;
+import static info.javaperformance.tools.VarLen.readUnsignedInt;
+import static info.javaperformance.tools.VarLen.writeUnsignedInt;
+
+import java.lang.reflect.Field;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.LockSupport;
+
 import info.javaperformance.malloc.Block;
 import info.javaperformance.malloc.ConcurrentBlockAllocator;
-import info.javaperformance.serializers.*;
+import info.javaperformance.serializers.ByteArray;
+import info.javaperformance.serializers.IIntSerializer;
+import info.javaperformance.serializers.IObjectSerializer;
 import info.javaperformance.tools.Buffers;
 import info.javaperformance.tools.LongAllocator;
 import info.javaperformance.tools.Primes;
 import info.javaperformance.tools.Tools;
 import sun.misc.Unsafe;
-
-import java.lang.reflect.Field;
-import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.LockSupport;
-
-import static info.javaperformance.buckets.LongBucketEncoding.*;
-import static info.javaperformance.tools.VarLen.readUnsignedInt;
-import static info.javaperformance.tools.VarLen.writeUnsignedInt;
 
 /**
  * A primitive concurrent hash map.
@@ -66,14 +72,14 @@ public class IntObjectConcurrentChainedMap<V> implements IIntObjectConcurrentMap
     These objects should not be static - some of the are initialized with map specific serializers, some may simply
     keep some map state for longer than needed.
      */
-    private final ThreadLocal<Iterator<V>> s_iters = new ThreadLocal<>();
-    private final ThreadLocal<ByteArray> s_bar1 = new ThreadLocal<>();
-    private final ThreadLocal<ByteArray> s_bar2 = new ThreadLocal<>();
-    private final ThreadLocal<Writer<V>> s_writers = new ThreadLocal<>();
+    private final ThreadLocal<Iterator<V>> s_iters = new ThreadLocal<Iterator<V>>();
+    private final ThreadLocal<ByteArray> s_bar1 = new ThreadLocal<ByteArray>();
+    private final ThreadLocal<ByteArray> s_bar2 = new ThreadLocal<ByteArray>();
+    private final ThreadLocal<Writer<V>> s_writers = new ThreadLocal<Writer<V>>();
     private final ThreadLocal<UpdateResult<V>> s_updateRes = new ThreadLocal<UpdateResult<V>>(){
         @Override
         protected UpdateResult<V> initialValue() {
-            return new UpdateResult<>();
+            return new UpdateResult<V>();
         }
     };
 
@@ -117,8 +123,6 @@ public class IntObjectConcurrentChainedMap<V> implements IIntObjectConcurrentMap
                                          final IIntSerializer keySerializer,
                                          final IObjectSerializer<V> valueSerializer )
     {
-        Objects.requireNonNull( keySerializer, "Key serializer must be provided!" );
-        Objects.requireNonNull( valueSerializer, "Value serializer must be provided!" );
         if ( fillFactor > 16 )
             throw new IllegalArgumentException( "Fill factors higher than 16 are not supported!" );
         if ( fillFactor <= 0.01 )
@@ -140,7 +144,7 @@ public class IntObjectConcurrentChainedMap<V> implements IIntObjectConcurrentMap
             while ( Primes.findNextPrime( ( int ) Math.ceil( threshold * 2 / fillFactor ) ) == newCapacity )
                 threshold *= 2;
         }
-        m_data = new AtomicReference<>( new Buffers( m_longAlloc.allocate( newCapacity ), null, threshold, 0, 2 ) );
+        m_data = new AtomicReference<Buffers>( new Buffers( m_longAlloc.allocate( newCapacity ), null, threshold, 0, 2 ) );
     }
 
     /**
@@ -645,10 +649,10 @@ public class IntObjectConcurrentChainedMap<V> implements IIntObjectConcurrentMap
         final long[] old = buffers.old;
         final long[] dest = buffers.cur;
         final ByteArray barLocal = new ByteArray();
-        final Iterator<V> iterLocal = new Iterator<>( m_keySerializer, m_valueSerializer );
+        final Iterator<V> iterLocal = new Iterator<V>( m_keySerializer, m_valueSerializer );
 
         //start from random position and wrap round. It should reduce write contention
-        final int startPos = ThreadLocalRandom.current().nextInt( old.length );
+        final int startPos = (int) (Math.random() * old.length);
 
         for ( int i = startPos; i < old.length; ++i )
             if ( !rehashInnerStep( old, dest, barLocal, iterLocal, i ) )
@@ -976,7 +980,7 @@ public class IntObjectConcurrentChainedMap<V> implements IIntObjectConcurrentMap
     {
         Iterator<V> res = s_iters.get();
         if ( res == null )
-            s_iters.set( res = new Iterator<>( m_keySerializer, m_valueSerializer ) );
+            s_iters.set( res = new Iterator<V>( m_keySerializer, m_valueSerializer ) );
         return res;
     }
 
@@ -988,7 +992,7 @@ public class IntObjectConcurrentChainedMap<V> implements IIntObjectConcurrentMap
     {
         Writer<V> w = s_writers.get();
         if ( w == null )
-            s_writers.set( w = new Writer<>( m_keySerializer, m_valueSerializer ) );
+            s_writers.set( w = new Writer<V>( m_keySerializer, m_valueSerializer ) );
         return w;
     }
 
@@ -1054,7 +1058,7 @@ public class IntObjectConcurrentChainedMap<V> implements IIntObjectConcurrentMap
             return res;
         }
     };
-    private final CopyOnWriteArrayList<MutableLong> m_sizes = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<MutableLong> m_sizes = new CopyOnWriteArrayList<MutableLong>();
 
     private long calculateSize()
     {

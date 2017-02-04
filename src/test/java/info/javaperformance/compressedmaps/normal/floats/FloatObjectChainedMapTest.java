@@ -19,14 +19,14 @@
 
 package info.javaperformance.compressedmaps.normal.floats;
 
-import info.javaperformance.compressedmaps.FloatMapFactory;
-import info.javaperformance.serializers.GenericStringSerializer;
-import java.nio.charset.StandardCharsets;
-import junit.framework.TestCase;
+import java.nio.charset.Charset;
 import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
+
+import info.javaperformance.compressedmaps.FloatMapFactory;
+import info.javaperformance.serializers.GenericStringSerializer;
+import junit.framework.TestCase;
 
 public class FloatObjectChainedMapTest extends TestCase
 {
@@ -37,7 +37,7 @@ public class FloatObjectChainedMapTest extends TestCase
 
     protected IFloatObjectMap<String> makeMap( final long size, final float fillFactor )
     {
-        return FloatMapFactory.singleThreadedFloatObjectMap( size, fillFactor, new GenericStringSerializer( StandardCharsets.UTF_8 ) );
+        return FloatMapFactory.singleThreadedFloatObjectMap( size, fillFactor, new GenericStringSerializer( Charset.forName("UTF-8") ) );
     }
 
     /**
@@ -136,10 +136,10 @@ public class FloatObjectChainedMapTest extends TestCase
 
     private void testPutRandom( final float fillFactor )
     {
-        final int seed = ThreadLocalRandom.current().nextInt();
+        final long seed = System.currentTimeMillis();
         System.out.println( "testPutRandom: ff = " + fillFactor + ", seed = " + seed);
         final Random r = new Random( seed );
-        final Set<Float> set = new LinkedHashSet<>( SIZE );
+        final Set<Float> set = new LinkedHashSet<Float>( SIZE );
         final float[] vals = new float[ SIZE ];
         while ( set.size() < SIZE )
             set.add( r.nextFloat() );
@@ -203,7 +203,7 @@ public class FloatObjectChainedMapTest extends TestCase
     {
         final Random r = new Random( 1 );
         final String[] values = new String[ SIZE ];
-        Set<Float> ks = new LinkedHashSet<>( SIZE );
+        Set<Float> ks = new LinkedHashSet<Float>( SIZE );
         while ( ks.size() < SIZE )
             ks.add( r.nextFloat() );
         final Float[] keys = ks.toArray( new Float[ SIZE ] );

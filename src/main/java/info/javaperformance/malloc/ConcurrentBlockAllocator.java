@@ -35,12 +35,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ConcurrentBlockAllocator {
     /** Data blocks are stored here */
     //private final BlockMap m_blocks = new BlockMap();
-    private final ConcurrentIntObjectMap<Block> m_blocks = new ConcurrentIntObjectMap<>( 1024 );
+    private final ConcurrentIntObjectMap<Block> m_blocks = new ConcurrentIntObjectMap<Block>( 1024 );
     /** Always take next value for block allocation */
     private final AtomicInteger m_nextBlock = new AtomicInteger( 0 );
 
     //must not be static - we don't want to share updateable objects
-    private final ThreadLocal<Block> m_currentBlock = new ThreadLocal<>();
+    private final ThreadLocal<Block> m_currentBlock = new ThreadLocal<Block>();
 
     public Block getBlockByIndex( final int index )
     {

@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SingleThreadedBlockMap {
-    private final Map<Integer, SingleThreadedBlock> m_other = new HashMap<>( 16, 0.75f );
+    private final Map<Integer, SingleThreadedBlock> m_other = new HashMap<Integer, SingleThreadedBlock>( 16, 0.75f );
     private SingleThreadedBlock[] m_data = new SingleThreadedBlock[ 1024 ];
     private int m_blockBase = 0;
     private int m_arSize = 0;

@@ -19,14 +19,14 @@
 
 package info.javaperformance.compressedmaps.normal.ints;
 
-import info.javaperformance.compressedmaps.IntMapFactory;
-import info.javaperformance.serializers.GenericStringSerializer;
-import java.nio.charset.StandardCharsets;
-import junit.framework.TestCase;
+import java.nio.charset.Charset;
 import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
+
+import info.javaperformance.compressedmaps.IntMapFactory;
+import info.javaperformance.serializers.GenericStringSerializer;
+import junit.framework.TestCase;
 
 public class IntObjectChainedMapTest extends TestCase
 {
@@ -37,7 +37,7 @@ public class IntObjectChainedMapTest extends TestCase
 
     protected IIntObjectMap<String> makeMap( final long size, final float fillFactor )
     {
-        return IntMapFactory.singleThreadedIntObjectMap( size, fillFactor, new GenericStringSerializer( StandardCharsets.UTF_8 ) );
+        return IntMapFactory.singleThreadedIntObjectMap( size, fillFactor, new GenericStringSerializer( Charset.forName("UTF-8") ) );
     }
 
     /**
@@ -136,10 +136,10 @@ public class IntObjectChainedMapTest extends TestCase
 
     private void testPutRandom( final float fillFactor )
     {
-        final int seed = ThreadLocalRandom.current().nextInt();
+        final long seed = System.currentTimeMillis();
         System.out.println( "testPutRandom: ff = " + fillFactor + ", seed = " + seed);
         final Random r = new Random( seed );
-        final Set<Integer> set = new LinkedHashSet<>( SIZE );
+        final Set<Integer> set = new LinkedHashSet<Integer>( SIZE );
         final int[] vals = new int[ SIZE ];
         while ( set.size() < SIZE )
             set.add( r.nextInt() );
@@ -203,7 +203,7 @@ public class IntObjectChainedMapTest extends TestCase
     {
         final Random r = new Random( 1 );
         final String[] values = new String[ SIZE ];
-        Set<Integer> ks = new LinkedHashSet<>( SIZE );
+        Set<Integer> ks = new LinkedHashSet<Integer>( SIZE );
         while ( ks.size() < SIZE )
             ks.add( r.nextInt() );
         final Integer[] keys = ks.toArray( new Integer[ SIZE ] );

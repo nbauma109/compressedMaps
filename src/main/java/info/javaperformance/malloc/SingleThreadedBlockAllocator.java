@@ -45,7 +45,7 @@ public class SingleThreadedBlockAllocator {
      */
     public SingleThreadedBlockAllocator( final long recycleMemoryLimit ) {
         m_recycleMemoryLimit = recycleMemoryLimit;
-        m_recycle = new ArrayDeque<>( 16 );
+        m_recycle = new ArrayDeque<SingleThreadedBlock>( 16 );
     }
 
     /**

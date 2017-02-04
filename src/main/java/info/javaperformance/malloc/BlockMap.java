@@ -36,9 +36,9 @@ import java.util.concurrent.locks.LockSupport;
  * in the Java ConcurrentHashMap (it requires boxing, so its use should be discouraged).
  */
 public class BlockMap {
-    private final ConcurrentHashMap<Integer, Block> m_other = new ConcurrentHashMap<>( 16 );
-    private final AtomicReference<Buffer> m_data = new AtomicReference<>( new Buffer( 1024 ) );
-    private final AtomicReference<Thread> m_relocating = new AtomicReference<>( null );
+    private final ConcurrentHashMap<Integer, Block> m_other = new ConcurrentHashMap<Integer, Block>( 16 );
+    private final AtomicReference<Buffer> m_data = new AtomicReference<Buffer>( new Buffer( 1024 ) );
+    private final AtomicReference<Thread> m_relocating = new AtomicReference<Thread>( null );
 
     private static final Block RELOCATED = new Block( null, -1, 0 );
 

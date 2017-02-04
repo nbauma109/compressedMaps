@@ -19,13 +19,13 @@
 
 package info.javaperformance.compressedmaps.concurrent.floats;
 
+import java.nio.charset.Charset;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import info.javaperformance.compressedmaps.FloatMapFactory;
 import info.javaperformance.serializers.GenericStringSerializer;
 import junit.framework.TestCase;
-
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 public class FloatObjectConcurrentChainedMapTest extends TestCase
 {
@@ -41,7 +41,7 @@ public class FloatObjectConcurrentChainedMapTest extends TestCase
 
     protected IFloatObjectConcurrentMap<String> getMap( final int size, final float ff )
     {
-        return FloatMapFactory.concurrentFloatObjectMap( size, ff, new GenericStringSerializer( StandardCharsets.UTF_8 ) );
+        return FloatMapFactory.concurrentFloatObjectMap( size, ff, new GenericStringSerializer( Charset.forName("UTF-8") ) );
     }
 
     /*

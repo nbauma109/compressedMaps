@@ -19,17 +19,17 @@
 
 package info.javaperformance.compressedmaps.normal.doubles;
 
+import static info.javaperformance.tools.VarLen.readUnsignedInt;
+import static info.javaperformance.tools.VarLen.writeUnsignedInt;
+
 import info.javaperformance.buckets.Buckets;
 import info.javaperformance.malloc.SingleThreadedBlock;
 import info.javaperformance.malloc.SingleThreadedBlockAllocator;
-import info.javaperformance.serializers.*;
+import info.javaperformance.serializers.ByteArray;
+import info.javaperformance.serializers.IDoubleSerializer;
+import info.javaperformance.serializers.IIntSerializer;
 import info.javaperformance.tools.Primes;
 import info.javaperformance.tools.Tools;
-
-import java.util.Objects;
-
-import static info.javaperformance.tools.VarLen.readUnsignedInt;
-import static info.javaperformance.tools.VarLen.writeUnsignedInt;
 
 /**
  * A simple single threaded compressed map. It uses {@code int[]} instead of {@code long[]} for buckets
@@ -98,8 +98,6 @@ public class DoubleIntChainedMap implements IDoubleIntMap{
                                final IDoubleSerializer keySerializer, final IIntSerializer valueSerializer,
                                final long blockCacheLimit )
     {
-        Objects.requireNonNull( keySerializer, "Key serializer must be provided!" );
-        Objects.requireNonNull( valueSerializer, "Value serializer must be provided!" );
         if ( fillFactor > 16 )
             throw new IllegalArgumentException( "Fill factors higher than 16 are not supported!" );
         if ( fillFactor <= 0.01 )

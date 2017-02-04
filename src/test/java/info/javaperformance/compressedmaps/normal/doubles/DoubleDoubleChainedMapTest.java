@@ -19,12 +19,12 @@
 
 package info.javaperformance.compressedmaps.normal.doubles;
 
-import info.javaperformance.compressedmaps.DoubleMapFactory;
-import junit.framework.TestCase;
 import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
+
+import info.javaperformance.compressedmaps.DoubleMapFactory;
+import junit.framework.TestCase;
 
 public class DoubleDoubleChainedMapTest extends TestCase
 {
@@ -134,10 +134,10 @@ public class DoubleDoubleChainedMapTest extends TestCase
 
     private void testPutRandom( final float fillFactor )
     {
-        final int seed = ThreadLocalRandom.current().nextInt();
+        final long seed = System.currentTimeMillis();
         System.out.println( "testPutRandom: ff = " + fillFactor + ", seed = " + seed);
         final Random r = new Random( seed );
-        final Set<Double> set = new LinkedHashSet<>( SIZE );
+        final Set<Double> set = new LinkedHashSet<Double>( SIZE );
         final double[] vals = new double[ SIZE ];
         while ( set.size() < SIZE )
             set.add( r.nextDouble() );
@@ -201,7 +201,7 @@ public class DoubleDoubleChainedMapTest extends TestCase
     {
         final Random r = new Random( 1 );
         final double[] values = new double[ SIZE ];
-        Set<Double> ks = new LinkedHashSet<>( SIZE );
+        Set<Double> ks = new LinkedHashSet<Double>( SIZE );
         while ( ks.size() < SIZE )
             ks.add( r.nextDouble() );
         final Double[] keys = ks.toArray( new Double[ SIZE ] );

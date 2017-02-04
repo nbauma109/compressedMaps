@@ -92,7 +92,7 @@ public class LongMapFactory
 
     public static <V> ILongObjectMap<V> singleThreadedLongObjectMap( final long size, final float fillFactor, final IObjectSerializer<V> valueSerializer )
     {
-        return new LongObjectChainedMap<>( size, fillFactor,
+        return new LongObjectChainedMap<V>( size, fillFactor,
             DefaultLongSerializer.INSTANCE, valueSerializer, SingleThreadedBlockAllocator.DEFAULT_RECYCLE_BOUND );
     }
 
@@ -100,7 +100,7 @@ public class LongMapFactory
                                                    final ILongSerializer keySerializer, final IObjectSerializer<V> valueSerializer,
                                                    final long blockCacheLimit )
     {
-        return new LongObjectChainedMap<>( size, fillFactor, keySerializer, valueSerializer, blockCacheLimit );
+        return new LongObjectChainedMap<V>( size, fillFactor, keySerializer, valueSerializer, blockCacheLimit );
     }
 
     /////////////////////////////////////////////////////////////
@@ -157,14 +157,14 @@ public class LongMapFactory
 
     public static <V> ILongObjectConcurrentMap<V> concurrentLongObjectMap( final long size, final float fillFactor, final IObjectSerializer<V> valueSerializer )
     {
-        return new LongObjectConcurrentChainedMap<>( size, fillFactor, DefaultLongSerializer.INSTANCE, valueSerializer );
+        return new LongObjectConcurrentChainedMap<V>( size, fillFactor, DefaultLongSerializer.INSTANCE, valueSerializer );
     }
 
     public static <V> ILongObjectConcurrentMap<V> concurrentLongObjectMap( final long size, final float fillFactor,
                                                          final ILongSerializer keySerializer,
                                                          final IObjectSerializer<V> valueSerializer )
     {
-        return new LongObjectConcurrentChainedMap<>( size, fillFactor, keySerializer, valueSerializer );
+        return new LongObjectConcurrentChainedMap<V>( size, fillFactor, keySerializer, valueSerializer );
     }
 
 }
