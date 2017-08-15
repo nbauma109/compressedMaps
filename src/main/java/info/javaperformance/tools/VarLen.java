@@ -22,317 +22,293 @@ package info.javaperformance.tools;
 import info.javaperformance.serializers.ByteArray;
 
 /**
- * Variable length encoding methods.
- * Some of these methods were adopted from Google Protobuf implementation.
+ * Variable length encoding methods. Some of these methods were adopted from
+ * Google Protobuf implementation.
  */
 public class VarLen {
 
-/**
-  * Some functionality extracted from Google Protobuf and updated to operate on byte buffers.
-  * Protobuf license:
-  *
-  // Protocol Buffers - Google's data interchange format
-  // Copyright 2008 Google Inc.  All rights reserved.
-  // https://developers.google.com/protocol-buffers/
-  //
-  // Redistribution and use in source and binary forms, with or without
-  // modification, are permitted provided that the following conditions are
-  // met:
-  //
-  //     * Redistributions of source code must retain the above copyright
-  // notice, this list of conditions and the following disclaimer.
-  //     * Redistributions in binary form must reproduce the above
-  // copyright notice, this list of conditions and the following disclaimer
-  // in the documentation and/or other materials provided with the
-  // distribution.
-  //     * Neither the name of Google Inc. nor the names of its
-  // contributors may be used to endorse or promote products derived from
-  // this software without specific prior written permission.
-  //
-  // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-  // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-  // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-  // A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-  // OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-  // SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-  // LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-  // DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-  // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-  // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  */
+	/**
+	 * Some functionality extracted from Google Protobuf and updated to operate
+	 * on byte buffers. Protobuf license:
+	 *
+	 * // Protocol Buffers - Google's data interchange format // Copyright 2008
+	 * Google Inc. All rights reserved. //
+	 * https://developers.google.com/protocol-buffers/ // // Redistribution and
+	 * use in source and binary forms, with or without // modification, are
+	 * permitted provided that the following conditions are // met: // // *
+	 * Redistributions of source code must retain the above copyright // notice,
+	 * this list of conditions and the following disclaimer. // *
+	 * Redistributions in binary form must reproduce the above // copyright
+	 * notice, this list of conditions and the following disclaimer // in the
+	 * documentation and/or other materials provided with the // distribution.
+	 * // * Neither the name of Google Inc. nor the names of its // contributors
+	 * may be used to endorse or promote products derived from // this software
+	 * without specific prior written permission. // // THIS SOFTWARE IS
+	 * PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS // "AS IS" AND ANY
+	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT // LIMITED TO, THE
+	 * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR // A PARTICULAR
+	 * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT // OWNER OR
+	 * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, // SPECIAL,
+	 * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT // LIMITED TO,
+	 * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, // DATA, OR
+	 * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY // THEORY OF
+	 * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT // (INCLUDING
+	 * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE // OF THIS
+	 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+	 */
 
-    /////////////////////////////////////////////////
-    // Public writing methods
-    /////////////////////////////////////////////////
+	/////////////////////////////////////////////////
+	// Public writing methods
+	/////////////////////////////////////////////////
 
-    public static void writeSignedLong( final long v, final ByteArray buf )
-    {
-        writeRawVarint64( encodeZigZag64( v ), buf );
-    }
+	public static void writeSignedLong(final long v, final ByteArray buf) {
+		writeRawVarint64(encodeZigZag64(v), buf);
+	}
 
-    public static void writeSignedInt( final int v, final ByteArray buf )
-    {
-        writeRawVarint32( encodeZigZag32( v ), buf );
-    }
+	public static void writeSignedInt(final int v, final ByteArray buf) {
+		writeRawVarint32(encodeZigZag32(v), buf);
+	}
 
-    public static void writeUnsignedInt( final int v, final ByteArray buf )
-    {
-        writeRawVarint32( v, buf );
-    }
-    public static void writeUnsignedLong( final long v, final ByteArray buf )
-    {
-        writeRawVarint64( v, buf );
-    }
+	public static void writeUnsignedInt(final int v, final ByteArray buf) {
+		writeRawVarint32(v, buf);
+	}
 
-    public static void writeFloat( final float v, final ByteArray buf )
-    {
-        writeRawFixed32( Float.floatToIntBits( v ), buf );
-    }
+	public static void writeUnsignedLong(final long v, final ByteArray buf) {
+		writeRawVarint64(v, buf);
+	}
 
-    public static void writeDouble( final double v, final ByteArray buf )
-    {
-        writeRawFixed64( Double.doubleToLongBits( v ), buf );
-    }
+	public static void writeFloat(final float v, final ByteArray buf) {
+		writeRawFixed32(Float.floatToIntBits(v), buf);
+	}
 
-    ///////////////////////////////////////////////////////////////////
-    //  Public reading methods
-    ///////////////////////////////////////////////////////////////////
+	public static void writeDouble(final double v, final ByteArray buf) {
+		writeRawFixed64(Double.doubleToLongBits(v), buf);
+	}
 
-    public static long readSignedLong( final ByteArray buf )
-    {
-        return decodeZigZag64( readRawVarint64( buf ) );
-    }
+	///////////////////////////////////////////////////////////////////
+	// Public reading methods
+	///////////////////////////////////////////////////////////////////
 
-    public static int readSignedInt( final ByteArray buf )
-    {
-        return decodeZigZag32( readRawVarint32( buf ) );
-    }
+	public static long readSignedLong(final ByteArray buf) {
+		return decodeZigZag64(readRawVarint64(buf));
+	}
 
-    public static int readUnsignedInt( final ByteArray buf )
-    {
-        return readRawVarint32( buf );
-    }
-    public static long readUnsignedLong( final ByteArray buf )
-    {
-        return readRawVarint64( buf );
-    }
+	public static int readSignedInt(final ByteArray buf) {
+		return decodeZigZag32(readRawVarint32(buf));
+	}
 
-    public static float readFloat( final ByteArray buf )
-    {
-        return Float.intBitsToFloat( readRawFixed32( buf ) );
-    }
+	public static int readUnsignedInt(final ByteArray buf) {
+		return readRawVarint32(buf);
+	}
 
-    public static double readDouble( final ByteArray buf )
-    {
-        return Double.longBitsToDouble( readRawFixed64( buf ) );
-    }
+	public static long readUnsignedLong(final ByteArray buf) {
+		return readRawVarint64(buf);
+	}
 
-    ///////////////////////////////////////////////////////////////////
-    //  Other public methods
-    ///////////////////////////////////////////////////////////////////
+	public static float readFloat(final ByteArray buf) {
+		return Float.intBitsToFloat(readRawFixed32(buf));
+	}
 
-    public static void skipVarLen( final ByteArray buf )
-    {
-        while ( buf.get() < 0 );
-    }
+	public static double readDouble(final ByteArray buf) {
+		return Double.longBitsToDouble(readRawFixed64(buf));
+	}
 
-    ///////////////////////////////////////////////////////////////////
-    //  Private (de)serialization methods
-    ///////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////
+	// Other public methods
+	///////////////////////////////////////////////////////////////////
 
+	public static void skipVarLen(final ByteArray buf) {
+		while (buf.get() < 0) {
+			;
+		}
+	}
 
-    /** Encode and write a varint. */
-    private static void writeRawVarint64( long value, final ByteArray buf) {
-      while (true) {
-        if ((value & ~0x7FL) == 0) {
-            buf.put((byte) value);
-            return;
-        } else {
-            buf.put((byte) (((int)value & 0x7F) | 0x80));
-            value >>>= 7;
-        }
-      }
-    }
+	///////////////////////////////////////////////////////////////////
+	// Private (de)serialization methods
+	///////////////////////////////////////////////////////////////////
 
-    /**
-     * Encode and write a varint.  {@code value} is treated as
-     * unsigned, so it won't be sign-extended if negative.
-     */
-    private static void writeRawVarint32(int value, final ByteArray buf)  {
-      while (true) {
-        if ((value & ~0x7F) == 0) {
-          buf.put((byte) value);
-          return;
-        } else {
-          buf.put((byte) ((value & 0x7F) | 0x80));
-          value >>>= 7;
-        }
-      }
-    }
+	/** Encode and write a varint. */
+	private static void writeRawVarint64(long value, final ByteArray buf) {
+		while (true) {
+			if ((value & ~0x7FL) == 0) {
+				buf.put((byte) value);
+				return;
+			} else {
+				buf.put((byte) (((int) value & 0x7F) | 0x80));
+				value >>>= 7;
+			}
+		}
+	}
 
-    /**
-     * Decode a ZigZag-encoded 32-bit value.  ZigZag encodes signed integers
-     * into values that can be efficiently encoded with varint.  (Otherwise,
-     * negative values must be sign-extended to 64 bits to be varint encoded,
-     * thus always taking 10 bytes on the wire.)
-     *
-     * @param n An unsigned 32-bit integer, stored in a signed int because
-     *          Java has no explicit unsigned support.
-     * @return A signed 32-bit integer.
-     */
-    private static int decodeZigZag32(final int n) {
-      return (n >>> 1) ^ -(n & 1);
-    }
+	/**
+	 * Encode and write a varint. {@code value} is treated as unsigned, so it
+	 * won't be sign-extended if negative.
+	 */
+	private static void writeRawVarint32(int value, final ByteArray buf) {
+		while (true) {
+			if ((value & ~0x7F) == 0) {
+				buf.put((byte) value);
+				return;
+			} else {
+				buf.put((byte) ((value & 0x7F) | 0x80));
+				value >>>= 7;
+			}
+		}
+	}
 
-    /**
-     * Decode a ZigZag-encoded 64-bit value.  ZigZag encodes signed integers
-     * into values that can be efficiently encoded with varint.  (Otherwise,
-     * negative values must be sign-extended to 64 bits to be varint encoded,
-     * thus always taking 10 bytes on the wire.)
-     *
-     * @param n An unsigned 64-bit integer, stored in a signed int because
-     *          Java has no explicit unsigned support.
-     * @return A signed 64-bit integer.
-     */
-    private static long decodeZigZag64(final long n) {
-      return (n >>> 1) ^ -(n & 1);
-    }
+	/**
+	 * Decode a ZigZag-encoded 32-bit value. ZigZag encodes signed integers into
+	 * values that can be efficiently encoded with varint. (Otherwise, negative
+	 * values must be sign-extended to 64 bits to be varint encoded, thus always
+	 * taking 10 bytes on the wire.)
+	 *
+	 * @param n
+	 *            An unsigned 32-bit integer, stored in a signed int because
+	 *            Java has no explicit unsigned support.
+	 * @return A signed 32-bit integer.
+	 */
+	private static int decodeZigZag32(final int n) {
+		return (n >>> 1) ^ -(n & 1);
+	}
 
-    /**
-     * Read a raw Varint from the stream.  If larger than 32 bits, discard the
-     * upper bits.
-     */
-    private static int readRawVarint32( final ByteArray buf ) {
-      // See implementation notes for readRawVarint64
-        int x;
-        if ((x = buf.get()) >= 0) {
-          return x;
-        } else if ((x ^= (buf.get() << 7)) < 0) {
-          x ^= (~0 << 7);
-        } else if ((x ^= (buf.get() << 14)) >= 0) {
-          x ^= (~0 << 7) ^ (~0 << 14);
-        } else if ((x ^= (buf.get() << 21)) < 0) {
-          x ^= (~0 << 7) ^ (~0 << 14) ^ (~0 << 21);
-        } else {
-          int y = buf.get();
-          x ^= y << 28;
-          x ^= (~0 << 7) ^ (~0 << 14) ^ (~0 << 21) ^ (~0 << 28);
-        }
-        return x;
-    }
+	/**
+	 * Decode a ZigZag-encoded 64-bit value. ZigZag encodes signed integers into
+	 * values that can be efficiently encoded with varint. (Otherwise, negative
+	 * values must be sign-extended to 64 bits to be varint encoded, thus always
+	 * taking 10 bytes on the wire.)
+	 *
+	 * @param n
+	 *            An unsigned 64-bit integer, stored in a signed int because
+	 *            Java has no explicit unsigned support.
+	 * @return A signed 64-bit integer.
+	 */
+	private static long decodeZigZag64(final long n) {
+		return (n >>> 1) ^ -(n & 1);
+	}
 
-    /** Read a raw Varint from the stream. */
-    private static long readRawVarint64( final ByteArray buf ) {
-        // Implementation notes:
-        //
-        // Optimized for one-byte values, expected to be common.
-        // The particular code below was selected from various candidates
-        // empirically, by winning VarintBenchmark.
-        //
-        // Sign extension of (signed) Java bytes is usually a nuisance, but
-        // we exploit it here to more easily obtain the sign of bytes read.
-        // Instead of cleaning up the sign extension bits by masking eagerly,
-        // we delay until we find the final (positive) byte, when we clear all
-        // accumulated bits with one xor.  We depend on javac to constant fold.
-        long x;
-        int y;
-        if ((y = buf.get()) >= 0) {
-          return y;
-        } else if ((y ^= (buf.get() << 7)) < 0) {
-          x = y ^ (~0 << 7);
-        } else if ((y ^= (buf.get() << 14)) >= 0) {
-          x = y ^ ((~0 << 7) ^ (~0 << 14));
-        } else if ((y ^= (buf.get() << 21)) < 0) {
-          x = y ^ ((~0 << 7) ^ (~0 << 14) ^ (~0 << 21));
-        } else if ((x = ((long) y) ^ ((long) buf.get() << 28)) >= 0L) {
-          x ^= (~0L << 7) ^ (~0L << 14) ^ (~0L << 21) ^ (~0L << 28);
-        } else if ((x ^= ((long) buf.get() << 35)) < 0L) {
-          x ^= (~0L << 7) ^ (~0L << 14) ^ (~0L << 21) ^ (~0L << 28) ^ (~0L << 35);
-        } else if ((x ^= ((long) buf.get() << 42)) >= 0L) {
-          x ^= (~0L << 7) ^ (~0L << 14) ^ (~0L << 21) ^ (~0L << 28) ^ (~0L << 35) ^ (~0L << 42);
-        } else if ((x ^= ((long) buf.get() << 49)) < 0L) {
-          x ^= (~0L << 7) ^ (~0L << 14) ^ (~0L << 21) ^ (~0L << 28) ^ (~0L << 35) ^ (~0L << 42)
-              ^ (~0L << 49);
-        } else {
-          x ^= ((long) buf.get() << 56);
-          x ^= (~0L << 7) ^ (~0L << 14) ^ (~0L << 21) ^ (~0L << 28) ^ (~0L << 35) ^ (~0L << 42)
-              ^ (~0L << 49) ^ (~0L << 56);
-          if ( x < 0 )
-              if ( buf.get() < 0 ) //the last bit
-                  throw new RuntimeException( "Malformed input!" );
-        }
-        return x;
-    }
+	/**
+	 * Read a raw Varint from the stream. If larger than 32 bits, discard the
+	 * upper bits.
+	 */
+	private static int readRawVarint32(final ByteArray buf) {
+		// See implementation notes for readRawVarint64
+		int x;
+		if ((x = buf.get()) >= 0) {
+			return x;
+		} else if ((x ^= (buf.get() << 7)) < 0) {
+			x ^= (~0 << 7);
+		} else if ((x ^= (buf.get() << 14)) >= 0) {
+			x ^= (~0 << 7) ^ (~0 << 14);
+		} else if ((x ^= (buf.get() << 21)) < 0) {
+			x ^= (~0 << 7) ^ (~0 << 14) ^ (~0 << 21);
+		} else {
+			int y = buf.get();
+			x ^= y << 28;
+			x ^= (~0 << 7) ^ (~0 << 14) ^ (~0 << 21) ^ (~0 << 28);
+		}
+		return x;
+	}
 
-    private static int readRawFixed32( final ByteArray buf )
-    {
-        return (((buf.get() & 0xff))       |
-                ((buf.get() & 0xff) <<  8) |
-                ((buf.get() & 0xff) << 16) |
-                ((buf.get() & 0xff) << 24));
-    }
+	/** Read a raw Varint from the stream. */
+	private static long readRawVarint64(final ByteArray buf) {
+		// Implementation notes:
+		//
+		// Optimized for one-byte values, expected to be common.
+		// The particular code below was selected from various candidates
+		// empirically, by winning VarintBenchmark.
+		//
+		// Sign extension of (signed) Java bytes is usually a nuisance, but
+		// we exploit it here to more easily obtain the sign of bytes read.
+		// Instead of cleaning up the sign extension bits by masking eagerly,
+		// we delay until we find the final (positive) byte, when we clear all
+		// accumulated bits with one xor. We depend on javac to constant fold.
+		long x;
+		int y;
+		if ((y = buf.get()) >= 0) {
+			return y;
+		} else if ((y ^= (buf.get() << 7)) < 0) {
+			x = y ^ (~0 << 7);
+		} else if ((y ^= (buf.get() << 14)) >= 0) {
+			x = y ^ ((~0 << 7) ^ (~0 << 14));
+		} else if ((y ^= (buf.get() << 21)) < 0) {
+			x = y ^ ((~0 << 7) ^ (~0 << 14) ^ (~0 << 21));
+		} else if ((x = (y) ^ ((long) buf.get() << 28)) >= 0L) {
+			x ^= (~0L << 7) ^ (~0L << 14) ^ (~0L << 21) ^ (~0L << 28);
+		} else if ((x ^= ((long) buf.get() << 35)) < 0L) {
+			x ^= (~0L << 7) ^ (~0L << 14) ^ (~0L << 21) ^ (~0L << 28) ^ (~0L << 35);
+		} else if ((x ^= ((long) buf.get() << 42)) >= 0L) {
+			x ^= (~0L << 7) ^ (~0L << 14) ^ (~0L << 21) ^ (~0L << 28) ^ (~0L << 35) ^ (~0L << 42);
+		} else if ((x ^= ((long) buf.get() << 49)) < 0L) {
+			x ^= (~0L << 7) ^ (~0L << 14) ^ (~0L << 21) ^ (~0L << 28) ^ (~0L << 35) ^ (~0L << 42) ^ (~0L << 49);
+		} else {
+			x ^= ((long) buf.get() << 56);
+			x ^= (~0L << 7) ^ (~0L << 14) ^ (~0L << 21) ^ (~0L << 28) ^ (~0L << 35) ^ (~0L << 42) ^ (~0L << 49) ^ (~0L << 56);
+			if (x < 0) {
+				if (buf.get() < 0) {
+					throw new RuntimeException("Malformed input!");
+				}
+			}
+		}
+		return x;
+	}
 
-    private static long readRawFixed64( final ByteArray buf )
-    {
-        return ((((long) buf.get() & 0xffL))       |
-                (((long) buf.get() & 0xffL) <<  8) |
-                (((long) buf.get() & 0xffL) << 16) |
-                (((long) buf.get() & 0xffL) << 24) |
-                (((long) buf.get() & 0xffL) << 32) |
-                (((long) buf.get() & 0xffL) << 40) |
-                (((long) buf.get() & 0xffL) << 48) |
-                (((long) buf.get() & 0xffL) << 56));
-    }
+	private static int readRawFixed32(final ByteArray buf) {
+		return (((buf.get() & 0xff)) | ((buf.get() & 0xff) << 8) | ((buf.get() & 0xff) << 16) | ((buf.get() & 0xff) << 24));
+	}
 
-    private static void writeRawFixed32( final int value, final ByteArray buf )
-    {
-        buf.put(   value         & 0xFF );
-        buf.put( ( value >>  8 ) & 0xFF );
-        buf.put( ( value >> 16 ) & 0xFF );
-        buf.put( ( value >> 24 ) & 0xFF );
-    }
+	private static long readRawFixed64(final ByteArray buf) {
+		return (((buf.get() & 0xffL)) | ((buf.get() & 0xffL) << 8) | ((buf.get() & 0xffL) << 16) | ((buf.get() & 0xffL) << 24) | ((buf.get() & 0xffL) << 32)
+				| ((buf.get() & 0xffL) << 40) | ((buf.get() & 0xffL) << 48) | ((buf.get() & 0xffL) << 56));
+	}
 
-    private static void writeRawFixed64( final long value, final ByteArray buf )
-    {
-        buf.put( ( int ) ( value )       & 0xFF );
-        buf.put( ( int ) ( value >> 8 )  & 0xFF );
-        buf.put( ( int ) ( value >> 16 ) & 0xFF );
-        buf.put( ( int ) ( value >> 24 ) & 0xFF );
-        buf.put( ( int ) ( value >> 32 ) & 0xFF );
-        buf.put( ( int ) ( value >> 40 ) & 0xFF );
-        buf.put( ( int ) ( value >> 48 ) & 0xFF );
-        buf.put( ( int ) ( value >> 56 ) & 0xFF );
-    }
+	private static void writeRawFixed32(final int value, final ByteArray buf) {
+		buf.put(value & 0xFF);
+		buf.put((value >> 8) & 0xFF);
+		buf.put((value >> 16) & 0xFF);
+		buf.put((value >> 24) & 0xFF);
+	}
 
-    /**
-     * Encode a ZigZag-encoded 32-bit value.  ZigZag encodes signed integers
-     * into values that can be efficiently encoded with varint.  (Otherwise,
-     * negative values must be sign-extended to 64 bits to be varint encoded,
-     * thus always taking 10 bytes on the wire.)
-     *
-     * @param n A signed 32-bit integer.
-     * @return An unsigned 32-bit integer, stored in a signed int because
-     *         Java has no explicit unsigned support.
-     */
-    private static int encodeZigZag32(final int n) {
-      // Note:  the right-shift must be arithmetic
-      return (n << 1) ^ (n >> 31);
-    }
+	private static void writeRawFixed64(final long value, final ByteArray buf) {
+		buf.put((int) (value) & 0xFF);
+		buf.put((int) (value >> 8) & 0xFF);
+		buf.put((int) (value >> 16) & 0xFF);
+		buf.put((int) (value >> 24) & 0xFF);
+		buf.put((int) (value >> 32) & 0xFF);
+		buf.put((int) (value >> 40) & 0xFF);
+		buf.put((int) (value >> 48) & 0xFF);
+		buf.put((int) (value >> 56) & 0xFF);
+	}
 
-    /**
-     * Encode a ZigZag-encoded 64-bit value.  ZigZag encodes signed integers
-     * into values that can be efficiently encoded with varint.  (Otherwise,
-     * negative values must be sign-extended to 64 bits to be varint encoded,
-     * thus always taking 10 bytes on the wire.)
-     *
-     * @param n A signed 64-bit integer.
-     * @return An unsigned 64-bit integer, stored in a signed int because
-     *         Java has no explicit unsigned support.
-     */
-    private static long encodeZigZag64(final long n) {
-      // Note:  the right-shift must be arithmetic
-      return (n << 1) ^ (n >> 63);
-    }
+	/**
+	 * Encode a ZigZag-encoded 32-bit value. ZigZag encodes signed integers into
+	 * values that can be efficiently encoded with varint. (Otherwise, negative
+	 * values must be sign-extended to 64 bits to be varint encoded, thus always
+	 * taking 10 bytes on the wire.)
+	 *
+	 * @param n
+	 *            A signed 32-bit integer.
+	 * @return An unsigned 32-bit integer, stored in a signed int because Java
+	 *         has no explicit unsigned support.
+	 */
+	private static int encodeZigZag32(final int n) {
+		// Note: the right-shift must be arithmetic
+		return (n << 1) ^ (n >> 31);
+	}
+
+	/**
+	 * Encode a ZigZag-encoded 64-bit value. ZigZag encodes signed integers into
+	 * values that can be efficiently encoded with varint. (Otherwise, negative
+	 * values must be sign-extended to 64 bits to be varint encoded, thus always
+	 * taking 10 bytes on the wire.)
+	 *
+	 * @param n
+	 *            A signed 64-bit integer.
+	 * @return An unsigned 64-bit integer, stored in a signed int because Java
+	 *         has no explicit unsigned support.
+	 */
+	private static long encodeZigZag64(final long n) {
+		// Note: the right-shift must be arithmetic
+		return (n << 1) ^ (n >> 63);
+	}
 
 }
