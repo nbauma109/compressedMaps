@@ -3,10 +3,9 @@ package info.javaperformance;
 import java.nio.charset.Charset;
 
 import info.javaperformance.compressedmaps.IntMapFactory;
+import info.javaperformance.compressedmaps.normal.ints.IIntIntMap;
 import info.javaperformance.compressedmaps.normal.ints.IIntLongMap;
 import info.javaperformance.compressedmaps.normal.ints.IIntObjectMap;
-import info.javaperformance.intint.IIntIntMap;
-import info.javaperformance.intint.IntIntMap;
 import info.javaperformance.serializers.GenericStringSerializer;
 import info.javaperformance.tools.BaseN;
 
@@ -21,7 +20,7 @@ public class CompositeMap {
 	private int maxLen;
 
 	public CompositeMap(int size, float fillFactor, String digits) {
-		intValuesById = new IntIntMap(size, fillFactor);
+		intValuesById = IntMapFactory.singleThreadedIntIntMap(size, fillFactor);
 		longValuesById = IntMapFactory.singleThreadedIntLongMap(size, fillFactor);
 		stringValuesById = IntMapFactory.singleThreadedIntObjectMap(size, fillFactor, new GenericStringSerializer(Charset.forName("UTF-8")));
 		baseN = new BaseN(digits);
@@ -65,7 +64,7 @@ public class CompositeMap {
 	}
 
 	public static void main(String[] args) {
-		CompositeMap compositeMap = new CompositeMap(16, 0.75F, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#_");
+		CompositeMap compositeMap = new CompositeMap(16, 16, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#_");
 		compositeMap.put(54326, "jhfds76");
 		compositeMap.put(87590, "A3#78_1");
 		compositeMap.put(76479, "Z49##__IOU0");
