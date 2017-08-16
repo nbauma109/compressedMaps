@@ -1,71 +1,52 @@
 package info.javaperformance;
 
+import java.math.BigInteger;
 import java.nio.charset.Charset;
 
+import org.apache.commons.lang.StringUtils;
+
 import info.javaperformance.compressedmaps.IntMapFactory;
-import info.javaperformance.compressedmaps.normal.ints.IIntIntMap;
-import info.javaperformance.compressedmaps.normal.ints.IIntLongMap;
 import info.javaperformance.compressedmaps.normal.ints.IIntObjectMap;
+import info.javaperformance.serializers.GenericBigIntegerSerializer;
 import info.javaperformance.serializers.GenericStringSerializer;
-import info.javaperformance.tools.BaseN;
+import uk.co.maxant.util.BaseX;
 
 public class CompositeMap {
 
-	private static final int LONG_MAX_LEN = Long.toString(Long.MAX_VALUE).length();
-
-	private IIntIntMap intValuesById;
-	private IIntLongMap longValuesById;
 	private IIntObjectMap<String> stringValuesById;
-	private BaseN baseN;
-	private int maxLen;
+	private IIntObjectMap<BigInteger> bigIntValuesById;
+	private char[] dictionary;
+	private BaseX baseX;
 
-	public CompositeMap(int size, float fillFactor, String digits) {
-		intValuesById = IntMapFactory.singleThreadedIntIntMap(size, fillFactor);
-		longValuesById = IntMapFactory.singleThreadedIntLongMap(size, fillFactor);
+	public CompositeMap(int size, float fillFactor, char[] dictionary) {
+		this.dictionary = dictionary;
+		baseX = new BaseX(dictionary);
 		stringValuesById = IntMapFactory.singleThreadedIntObjectMap(size, fillFactor, new GenericStringSerializer(Charset.forName("UTF-8")));
-		baseN = new BaseN(digits);
-		maxLen = baseN.toString(Long.MAX_VALUE).length();
+		bigIntValuesById = IntMapFactory.singleThreadedIntObjectMap(size, fillFactor, new GenericBigIntegerSerializer());
 	}
 
 	public synchronized void put(int key, String value) {
 		if (value == null) {
 			return;
 		}
-		try {
-			if (value.trim().length() == 0) {
-				stringValuesById.put(key, value.intern());
-			} else if (value.length() <= LONG_MAX_LEN && value.matches("[0-9]+")) {
-				long parsedValue = Long.parseLong(value);
-				if (parsedValue >= Integer.MIN_VALUE && parsedValue <= Integer.MAX_VALUE) {
-					intValuesById.put(key, (int) parsedValue);
-				} else {
-					longValuesById.put(key, parsedValue);
-				}
-			} else if (value.length() <= maxLen && value.matches("[" + baseN.getDigits() + "]+")) {
-				longValuesById.put(key, baseN.parseLong(value));
-			} else {
-				stringValuesById.put(key, value);
-			}
-		} catch (NumberFormatException e) {
+		if ("0".equals(value) || !value.startsWith("0") && StringUtils.containsOnly(value, dictionary)) {
+			bigIntValuesById.put(key, baseX.decode(value));
+		} else {
 			stringValuesById.put(key, value);
 		}
 	}
 
 	public synchronized String get(int key) {
-		int intValue = intValuesById.get(key);
-		if (intValue != 0) {
-			return String.valueOf(intValue);
-		}
-		long longValue = longValuesById.get(key);
-		if (longValue != 0) {
-			return baseN.toString(longValue);
+		BigInteger intValue = bigIntValuesById.get(key);
+		if (intValue != null) {
+			return baseX.encode(intValue);
 		}
 		return stringValuesById.get(key);
 	}
 
 	public static void main(String[] args) {
-		CompositeMap compositeMap = new CompositeMap(16, 16, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#_");
-		compositeMap.put(54326, "jhfds76");
+		CompositeMap compositeMap = new CompositeMap(16, 16, BaseX.DICTIONARY_16);
+		compositeMap.put(54326, "AB123");
 		compositeMap.put(87590, "A3#78_1");
 		compositeMap.put(76479, "Z49##__IOU0");
 		System.out.println(compositeMap.get(54326));
