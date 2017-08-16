@@ -19,12 +19,12 @@
 
 package info.javaperformance.compressedmaps.normal.floats;
 
+import info.javaperformance.compressedmaps.FloatMapFactory;
+import junit.framework.TestCase;
 import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
-
-import info.javaperformance.compressedmaps.FloatMapFactory;
-import junit.framework.TestCase;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class FloatFloatChainedMapTest extends TestCase
 {
@@ -134,10 +134,10 @@ public class FloatFloatChainedMapTest extends TestCase
 
     private void testPutRandom( final float fillFactor )
     {
-        final long seed = System.currentTimeMillis();
+        final int seed = ThreadLocalRandom.current().nextInt();
         System.out.println( "testPutRandom: ff = " + fillFactor + ", seed = " + seed);
         final Random r = new Random( seed );
-        final Set<Float> set = new LinkedHashSet<Float>( SIZE );
+        final Set<Float> set = new LinkedHashSet<>( SIZE );
         final float[] vals = new float[ SIZE ];
         while ( set.size() < SIZE )
             set.add( r.nextFloat() );
@@ -201,7 +201,7 @@ public class FloatFloatChainedMapTest extends TestCase
     {
         final Random r = new Random( 1 );
         final float[] values = new float[ SIZE ];
-        Set<Float> ks = new LinkedHashSet<Float>( SIZE );
+        Set<Float> ks = new LinkedHashSet<>( SIZE );
         while ( ks.size() < SIZE )
             ks.add( r.nextFloat() );
         final Float[] keys = ks.toArray( new Float[ SIZE ] );

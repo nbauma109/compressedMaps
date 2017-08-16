@@ -92,7 +92,7 @@ public class FloatMapFactory
 
     public static <V> IFloatObjectMap<V> singleThreadedFloatObjectMap( final long size, final float fillFactor, final IObjectSerializer<V> valueSerializer )
     {
-        return new FloatObjectChainedMap<V>( size, fillFactor,
+        return new FloatObjectChainedMap<>( size, fillFactor,
             DefaultFloatSerializer.INSTANCE, valueSerializer, SingleThreadedBlockAllocator.DEFAULT_RECYCLE_BOUND );
     }
 
@@ -100,7 +100,7 @@ public class FloatMapFactory
                                                    final IFloatSerializer keySerializer, final IObjectSerializer<V> valueSerializer,
                                                    final long blockCacheLimit )
     {
-        return new FloatObjectChainedMap<V>( size, fillFactor, keySerializer, valueSerializer, blockCacheLimit );
+        return new FloatObjectChainedMap<>( size, fillFactor, keySerializer, valueSerializer, blockCacheLimit );
     }
 
     /////////////////////////////////////////////////////////////
@@ -157,14 +157,14 @@ public class FloatMapFactory
 
     public static <V> IFloatObjectConcurrentMap<V> concurrentFloatObjectMap( final long size, final float fillFactor, final IObjectSerializer<V> valueSerializer )
     {
-        return new FloatObjectConcurrentChainedMap<V>( size, fillFactor, DefaultFloatSerializer.INSTANCE, valueSerializer );
+        return new FloatObjectConcurrentChainedMap<>( size, fillFactor, DefaultFloatSerializer.INSTANCE, valueSerializer );
     }
 
     public static <V> IFloatObjectConcurrentMap<V> concurrentFloatObjectMap( final long size, final float fillFactor,
                                                          final IFloatSerializer keySerializer,
                                                          final IObjectSerializer<V> valueSerializer )
     {
-        return new FloatObjectConcurrentChainedMap<V>( size, fillFactor, keySerializer, valueSerializer );
+        return new FloatObjectConcurrentChainedMap<>( size, fillFactor, keySerializer, valueSerializer );
     }
 
 }

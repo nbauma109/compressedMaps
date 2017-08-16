@@ -30,7 +30,7 @@ import java.util.concurrent.locks.LockSupport;
  */
 public class LongAllocator {
     private final AtomicInteger m_allocating = new AtomicInteger( -1 );
-    private volatile WeakReference<long[]> m_data = new WeakReference<long[]>( null );
+    private volatile WeakReference<long[]> m_data = new WeakReference<>( null );
 
     public long[] allocate( final int size )
     {
@@ -44,7 +44,7 @@ public class LongAllocator {
             if (m_allocating.compareAndSet(currentlyAllocated, size )) {
                 try {
                     final long[] res = new long[size];
-                    m_data = new WeakReference<long[]>(res);
+                    m_data = new WeakReference<>(res);
                     m_allocating.set( -1 );
                     return res;
                 }

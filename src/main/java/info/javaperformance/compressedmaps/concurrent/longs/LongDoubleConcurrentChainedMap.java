@@ -19,31 +19,25 @@
 
 package info.javaperformance.compressedmaps.concurrent.longs;
 
-import static info.javaperformance.buckets.LongBucketEncoding.EMPTY;
-import static info.javaperformance.buckets.LongBucketEncoding.MAX_ENCODED_LENGTH;
-import static info.javaperformance.buckets.LongBucketEncoding.RELOCATED;
-import static info.javaperformance.buckets.LongBucketEncoding.getBlockIndex;
-import static info.javaperformance.buckets.LongBucketEncoding.getBlockLength;
-import static info.javaperformance.buckets.LongBucketEncoding.getOffset;
-import static info.javaperformance.buckets.LongBucketEncoding.pack;
-import static info.javaperformance.tools.VarLen.readUnsignedInt;
-import static info.javaperformance.tools.VarLen.writeUnsignedInt;
-
-import java.lang.reflect.Field;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.LockSupport;
-
 import info.javaperformance.malloc.Block;
 import info.javaperformance.malloc.ConcurrentBlockAllocator;
-import info.javaperformance.serializers.ByteArray;
-import info.javaperformance.serializers.IDoubleSerializer;
-import info.javaperformance.serializers.ILongSerializer;
+import info.javaperformance.serializers.*;
 import info.javaperformance.tools.Buffers;
 import info.javaperformance.tools.LongAllocator;
 import info.javaperformance.tools.Primes;
 import info.javaperformance.tools.Tools;
 import sun.misc.Unsafe;
+
+import java.lang.reflect.Field;
+import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.LockSupport;
+
+import static info.javaperformance.buckets.LongBucketEncoding.*;
+import static info.javaperformance.tools.VarLen.readUnsignedInt;
+import static info.javaperformance.tools.VarLen.writeUnsignedInt;
 
 /**
  * A primitive concurrent hash map.
@@ -72,10 +66,10 @@ public class LongDoubleConcurrentChainedMap implements ILongDoubleConcurrentMap{
     These objects should not be static - some of the are initialized with map specific serializers, some may simply
     keep some map state for longer than needed.
      */
-    private final ThreadLocal<Iterator> s_iters = new ThreadLocal<Iterator>();
-    private final ThreadLocal<ByteArray> s_bar1 = new ThreadLocal<ByteArray>();
-    private final ThreadLocal<ByteArray> s_bar2 = new ThreadLocal<ByteArray>();
-    private final ThreadLocal<Writer> s_writers = new ThreadLocal<Writer>();
+    private final ThreadLocal<Iterator> s_iters = new ThreadLocal<>();
+    private final ThreadLocal<ByteArray> s_bar1 = new ThreadLocal<>();
+    private final ThreadLocal<ByteArray> s_bar2 = new ThreadLocal<>();
+    private final ThreadLocal<Writer> s_writers = new ThreadLocal<>();
     private final ThreadLocal<UpdateResult> s_updateRes = new ThreadLocal<UpdateResult>(){
         @Override
         protected UpdateResult initialValue() {
@@ -126,6 +120,8 @@ public class LongDoubleConcurrentChainedMap implements ILongDoubleConcurrentMap{
                                          final ILongSerializer keySerializer,
                                          final IDoubleSerializer valueSerializer )
     {
+        Objects.requireNonNull( keySerializer, "Key serializer must be provided!" );
+        Objects.requireNonNull( valueSerializer, "Value serializer must be provided!" );
         if ( fillFactor > 16 )
             throw new IllegalArgumentException( "Fill factors higher than 16 are not supported!" );
         if ( fillFactor <= 0.01 )
@@ -147,7 +143,7 @@ public class LongDoubleConcurrentChainedMap implements ILongDoubleConcurrentMap{
             while ( Primes.findNextPrime( ( int ) Math.ceil( threshold * 2 / fillFactor ) ) == newCapacity )
                 threshold *= 2;
         }
-        m_data = new AtomicReference<Buffers>( new Buffers( m_longAlloc.allocate( newCapacity ), null, threshold, 0, 2 ) );
+        m_data = new AtomicReference<>( new Buffers( m_longAlloc.allocate( newCapacity ), null, threshold, 0, 2 ) );
         m_singleEntryLength = m_keySerializer.getMaxLength() + m_valueSerializer.getMaxLength() + 1; //optimization
     }
 
@@ -648,7 +644,7 @@ public class LongDoubleConcurrentChainedMap implements ILongDoubleConcurrentMap{
         final Iterator iterLocal = new Iterator( m_keySerializer, m_valueSerializer );
 
         //start from random position and wrap round. It should reduce write contention
-        final int startPos = (int) (Math.random() * old.length);
+        final int startPos = ThreadLocalRandom.current().nextInt( old.length );
 
         for ( int i = startPos; i < old.length; ++i )
             if ( !rehashInnerStep( old, dest, barLocal, iterLocal, i ) )
@@ -1047,7 +1043,7 @@ public class LongDoubleConcurrentChainedMap implements ILongDoubleConcurrentMap{
             return res;
         }
     };
-    private final CopyOnWriteArrayList<MutableLong> m_sizes = new CopyOnWriteArrayList<MutableLong>();
+    private final CopyOnWriteArrayList<MutableLong> m_sizes = new CopyOnWriteArrayList<>();
 
     private long calculateSize()
     {

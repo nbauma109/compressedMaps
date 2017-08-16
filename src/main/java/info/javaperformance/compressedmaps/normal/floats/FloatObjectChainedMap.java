@@ -19,17 +19,17 @@
 
 package info.javaperformance.compressedmaps.normal.floats;
 
-import static info.javaperformance.tools.VarLen.readUnsignedInt;
-import static info.javaperformance.tools.VarLen.writeUnsignedInt;
-
 import info.javaperformance.buckets.Buckets;
 import info.javaperformance.malloc.SingleThreadedBlock;
 import info.javaperformance.malloc.SingleThreadedBlockAllocator;
-import info.javaperformance.serializers.ByteArray;
-import info.javaperformance.serializers.IFloatSerializer;
-import info.javaperformance.serializers.IObjectSerializer;
+import info.javaperformance.serializers.*;
 import info.javaperformance.tools.Primes;
 import info.javaperformance.tools.Tools;
+
+import java.util.Objects;
+
+import static info.javaperformance.tools.VarLen.readUnsignedInt;
+import static info.javaperformance.tools.VarLen.writeUnsignedInt;
 
 /**
  * A simple single threaded compressed map. It uses {@code int[]} instead of {@code long[]} for buckets
@@ -44,7 +44,7 @@ public class FloatObjectChainedMap<V> implements IFloatObjectMap<V>{
     private final Iterator<V> m_iter;
     private final ByteArray m_bar1 = new ByteArray();
     private final ByteArray m_bar2 = new ByteArray();
-    private final UpdateResult<V> m_updateResult = new UpdateResult<V>();
+    private final UpdateResult<V> m_updateResult = new UpdateResult<>();
     private final Writer<V> m_writer;
 
     /** Key serializer */
@@ -96,6 +96,8 @@ public class FloatObjectChainedMap<V> implements IFloatObjectMap<V>{
                                final IFloatSerializer keySerializer, final IObjectSerializer<V> valueSerializer,
                                final long blockCacheLimit )
     {
+        Objects.requireNonNull( keySerializer, "Key serializer must be provided!" );
+        Objects.requireNonNull( valueSerializer, "Value serializer must be provided!" );
         if ( fillFactor > 16 )
             throw new IllegalArgumentException( "Fill factors higher than 16 are not supported!" );
         if ( fillFactor <= 0.01 )
@@ -123,8 +125,8 @@ public class FloatObjectChainedMap<V> implements IFloatObjectMap<V>{
             m_threshold = threshold;
         }
         //optimizations
-        m_iter = new Iterator<V>( m_keySerializer, m_valueSerializer );
-        m_writer = new Writer<V>( m_keySerializer, m_valueSerializer );
+        m_iter = new Iterator<>( m_keySerializer, m_valueSerializer );
+        m_writer = new Writer<>( m_keySerializer, m_valueSerializer );
     }
 
     public V get( final float key )
@@ -495,7 +497,7 @@ public class FloatObjectChainedMap<V> implements IFloatObjectMap<V>{
     private void rehash( final Buckets old )
     {
         final ByteArray barLocal = new ByteArray();
-        final Iterator<V> iterLocal = new Iterator<V>( m_keySerializer, m_valueSerializer );
+        final Iterator<V> iterLocal = new Iterator<>( m_keySerializer, m_valueSerializer );
 
         for ( int i = 0; i < old.length(); ++i )
             if ( old.select( i ) )

@@ -1,14 +1,14 @@
 package info.javaperformance.serializers;
 
-import java.nio.charset.Charset;
-import java.util.concurrent.CountDownLatch;
-
 import junit.framework.TestCase;
+
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CountDownLatch;
 
 public class GenericStringSerializerTest extends TestCase {
     public void testConcurrent() throws InterruptedException {
         final int THREADS = 32;
-        final GenericStringSerializer s = new GenericStringSerializer( Charset.forName("UTF-8") );
+        final GenericStringSerializer s = new GenericStringSerializer( StandardCharsets.UTF_8 );
         final CountDownLatch start = new CountDownLatch( THREADS );
         final CountDownLatch end = new CountDownLatch( THREADS );
         for ( int i = 0; i < THREADS; ++i )

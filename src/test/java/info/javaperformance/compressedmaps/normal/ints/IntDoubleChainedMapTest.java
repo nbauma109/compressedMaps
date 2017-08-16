@@ -19,12 +19,12 @@
 
 package info.javaperformance.compressedmaps.normal.ints;
 
+import info.javaperformance.compressedmaps.IntMapFactory;
+import junit.framework.TestCase;
 import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
-
-import info.javaperformance.compressedmaps.IntMapFactory;
-import junit.framework.TestCase;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class IntDoubleChainedMapTest extends TestCase
 {
@@ -134,10 +134,10 @@ public class IntDoubleChainedMapTest extends TestCase
 
     private void testPutRandom( final float fillFactor )
     {
-        final long seed = System.currentTimeMillis();
+        final int seed = ThreadLocalRandom.current().nextInt();
         System.out.println( "testPutRandom: ff = " + fillFactor + ", seed = " + seed);
         final Random r = new Random( seed );
-        final Set<Integer> set = new LinkedHashSet<Integer>( SIZE );
+        final Set<Integer> set = new LinkedHashSet<>( SIZE );
         final int[] vals = new int[ SIZE ];
         while ( set.size() < SIZE )
             set.add( r.nextInt() );
@@ -201,7 +201,7 @@ public class IntDoubleChainedMapTest extends TestCase
     {
         final Random r = new Random( 1 );
         final double[] values = new double[ SIZE ];
-        Set<Integer> ks = new LinkedHashSet<Integer>( SIZE );
+        Set<Integer> ks = new LinkedHashSet<>( SIZE );
         while ( ks.size() < SIZE )
             ks.add( r.nextInt() );
         final Integer[] keys = ks.toArray( new Integer[ SIZE ] );

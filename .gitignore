@@ -3,7 +3,3 @@
 out
 .gitignore
 todo.txt
-/target/
-/.classpath
-/.project
-/.settings/

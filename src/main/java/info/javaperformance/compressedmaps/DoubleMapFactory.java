@@ -92,7 +92,7 @@ public class DoubleMapFactory
 
     public static <V> IDoubleObjectMap<V> singleThreadedDoubleObjectMap( final long size, final float fillFactor, final IObjectSerializer<V> valueSerializer )
     {
-        return new DoubleObjectChainedMap<V>( size, fillFactor,
+        return new DoubleObjectChainedMap<>( size, fillFactor,
             DefaultDoubleSerializer.INSTANCE, valueSerializer, SingleThreadedBlockAllocator.DEFAULT_RECYCLE_BOUND );
     }
 
@@ -100,7 +100,7 @@ public class DoubleMapFactory
                                                    final IDoubleSerializer keySerializer, final IObjectSerializer<V> valueSerializer,
                                                    final long blockCacheLimit )
     {
-        return new DoubleObjectChainedMap<V>( size, fillFactor, keySerializer, valueSerializer, blockCacheLimit );
+        return new DoubleObjectChainedMap<>( size, fillFactor, keySerializer, valueSerializer, blockCacheLimit );
     }
 
     /////////////////////////////////////////////////////////////
@@ -157,14 +157,14 @@ public class DoubleMapFactory
 
     public static <V> IDoubleObjectConcurrentMap<V> concurrentDoubleObjectMap( final long size, final float fillFactor, final IObjectSerializer<V> valueSerializer )
     {
-        return new DoubleObjectConcurrentChainedMap<V>( size, fillFactor, DefaultDoubleSerializer.INSTANCE, valueSerializer );
+        return new DoubleObjectConcurrentChainedMap<>( size, fillFactor, DefaultDoubleSerializer.INSTANCE, valueSerializer );
     }
 
     public static <V> IDoubleObjectConcurrentMap<V> concurrentDoubleObjectMap( final long size, final float fillFactor,
                                                          final IDoubleSerializer keySerializer,
                                                          final IObjectSerializer<V> valueSerializer )
     {
-        return new DoubleObjectConcurrentChainedMap<V>( size, fillFactor, keySerializer, valueSerializer );
+        return new DoubleObjectConcurrentChainedMap<>( size, fillFactor, keySerializer, valueSerializer );
     }
 
 }

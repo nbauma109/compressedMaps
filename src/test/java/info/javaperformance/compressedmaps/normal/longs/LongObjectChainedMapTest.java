@@ -19,14 +19,14 @@
 
 package info.javaperformance.compressedmaps.normal.longs;
 
-import java.nio.charset.Charset;
+import info.javaperformance.compressedmaps.LongMapFactory;
+import info.javaperformance.serializers.GenericStringSerializer;
+import java.nio.charset.StandardCharsets;
+import junit.framework.TestCase;
 import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
-
-import info.javaperformance.compressedmaps.LongMapFactory;
-import info.javaperformance.serializers.GenericStringSerializer;
-import junit.framework.TestCase;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class LongObjectChainedMapTest extends TestCase
 {
@@ -37,7 +37,7 @@ public class LongObjectChainedMapTest extends TestCase
 
     protected ILongObjectMap<String> makeMap( final long size, final float fillFactor )
     {
-        return LongMapFactory.singleThreadedLongObjectMap( size, fillFactor, new GenericStringSerializer( Charset.forName("UTF-8") ) );
+        return LongMapFactory.singleThreadedLongObjectMap( size, fillFactor, new GenericStringSerializer( StandardCharsets.UTF_8 ) );
     }
 
     /**
@@ -136,10 +136,10 @@ public class LongObjectChainedMapTest extends TestCase
 
     private void testPutRandom( final float fillFactor )
     {
-        final long seed = System.currentTimeMillis();
+        final int seed = ThreadLocalRandom.current().nextInt();
         System.out.println( "testPutRandom: ff = " + fillFactor + ", seed = " + seed);
         final Random r = new Random( seed );
-        final Set<Long> set = new LinkedHashSet<Long>( SIZE );
+        final Set<Long> set = new LinkedHashSet<>( SIZE );
         final long[] vals = new long[ SIZE ];
         while ( set.size() < SIZE )
             set.add( r.nextLong() );
@@ -203,7 +203,7 @@ public class LongObjectChainedMapTest extends TestCase
     {
         final Random r = new Random( 1 );
         final String[] values = new String[ SIZE ];
-        Set<Long> ks = new LinkedHashSet<Long>( SIZE );
+        Set<Long> ks = new LinkedHashSet<>( SIZE );
         while ( ks.size() < SIZE )
             ks.add( r.nextLong() );
         final Long[] keys = ks.toArray( new Long[ SIZE ] );

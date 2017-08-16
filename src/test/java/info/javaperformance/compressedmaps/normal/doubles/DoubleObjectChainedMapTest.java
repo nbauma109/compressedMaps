@@ -19,14 +19,14 @@
 
 package info.javaperformance.compressedmaps.normal.doubles;
 
-import java.nio.charset.Charset;
+import info.javaperformance.compressedmaps.DoubleMapFactory;
+import info.javaperformance.serializers.GenericStringSerializer;
+import java.nio.charset.StandardCharsets;
+import junit.framework.TestCase;
 import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
-
-import info.javaperformance.compressedmaps.DoubleMapFactory;
-import info.javaperformance.serializers.GenericStringSerializer;
-import junit.framework.TestCase;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class DoubleObjectChainedMapTest extends TestCase
 {
@@ -37,7 +37,7 @@ public class DoubleObjectChainedMapTest extends TestCase
 
     protected IDoubleObjectMap<String> makeMap( final long size, final float fillFactor )
     {
-        return DoubleMapFactory.singleThreadedDoubleObjectMap( size, fillFactor, new GenericStringSerializer( Charset.forName("UTF-8") ) );
+        return DoubleMapFactory.singleThreadedDoubleObjectMap( size, fillFactor, new GenericStringSerializer( StandardCharsets.UTF_8 ) );
     }
 
     /**
@@ -136,10 +136,10 @@ public class DoubleObjectChainedMapTest extends TestCase
 
     private void testPutRandom( final float fillFactor )
     {
-        final long seed = System.currentTimeMillis();
+        final int seed = ThreadLocalRandom.current().nextInt();
         System.out.println( "testPutRandom: ff = " + fillFactor + ", seed = " + seed);
         final Random r = new Random( seed );
-        final Set<Double> set = new LinkedHashSet<Double>( SIZE );
+        final Set<Double> set = new LinkedHashSet<>( SIZE );
         final double[] vals = new double[ SIZE ];
         while ( set.size() < SIZE )
             set.add( r.nextDouble() );
@@ -203,7 +203,7 @@ public class DoubleObjectChainedMapTest extends TestCase
     {
         final Random r = new Random( 1 );
         final String[] values = new String[ SIZE ];
-        Set<Double> ks = new LinkedHashSet<Double>( SIZE );
+        Set<Double> ks = new LinkedHashSet<>( SIZE );
         while ( ks.size() < SIZE )
             ks.add( r.nextDouble() );
         final Double[] keys = ks.toArray( new Double[ SIZE ] );

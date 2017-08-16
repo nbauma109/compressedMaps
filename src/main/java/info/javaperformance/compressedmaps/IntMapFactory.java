@@ -92,7 +92,7 @@ public class IntMapFactory
 
     public static <V> IIntObjectMap<V> singleThreadedIntObjectMap( final long size, final float fillFactor, final IObjectSerializer<V> valueSerializer )
     {
-        return new IntObjectChainedMap<V>( size, fillFactor,
+        return new IntObjectChainedMap<>( size, fillFactor,
             DefaultIntSerializer.INSTANCE, valueSerializer, SingleThreadedBlockAllocator.DEFAULT_RECYCLE_BOUND );
     }
 
@@ -100,7 +100,7 @@ public class IntMapFactory
                                                    final IIntSerializer keySerializer, final IObjectSerializer<V> valueSerializer,
                                                    final long blockCacheLimit )
     {
-        return new IntObjectChainedMap<V>( size, fillFactor, keySerializer, valueSerializer, blockCacheLimit );
+        return new IntObjectChainedMap<>( size, fillFactor, keySerializer, valueSerializer, blockCacheLimit );
     }
 
     /////////////////////////////////////////////////////////////
@@ -157,14 +157,14 @@ public class IntMapFactory
 
     public static <V> IIntObjectConcurrentMap<V> concurrentIntObjectMap( final long size, final float fillFactor, final IObjectSerializer<V> valueSerializer )
     {
-        return new IntObjectConcurrentChainedMap<V>( size, fillFactor, DefaultIntSerializer.INSTANCE, valueSerializer );
+        return new IntObjectConcurrentChainedMap<>( size, fillFactor, DefaultIntSerializer.INSTANCE, valueSerializer );
     }
 
     public static <V> IIntObjectConcurrentMap<V> concurrentIntObjectMap( final long size, final float fillFactor,
                                                          final IIntSerializer keySerializer,
                                                          final IObjectSerializer<V> valueSerializer )
     {
-        return new IntObjectConcurrentChainedMap<V>( size, fillFactor, keySerializer, valueSerializer );
+        return new IntObjectConcurrentChainedMap<>( size, fillFactor, keySerializer, valueSerializer );
     }
 
 }

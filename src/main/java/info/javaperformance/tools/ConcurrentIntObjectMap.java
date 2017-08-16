@@ -1,10 +1,10 @@
 package info.javaperformance.tools;
 
+import sun.misc.Unsafe;
+
 import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.Random;
-
-import sun.misc.Unsafe;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * This class is derived from Java 8 ConcurrentHashMap.
@@ -20,7 +20,7 @@ public class ConcurrentIntObjectMap<V>
 
 
     /* ---------------- Constants -------------- */
-    private static final Random random = new Random();
+
     /**
      * The largest possible table capacity.  This value must be
      * exactly 1<<30 to stay within Java array allocation and indexing
@@ -542,7 +542,7 @@ public class ConcurrentIntObjectMap<V>
             CounterCell a; long v; int m;
             boolean uncontended = true;
             if (as == null || (m = as.length - 1) < 0 ||
-                (a = as[random.nextInt() & m]) == null ||
+                (a = as[ThreadLocalRandom.current().nextInt() & m]) == null ||
                 !(uncontended =
                   U.compareAndSwapLong(a, CELLVALUE, v = a.value, v + x))) {
                 fullAddCount(x, uncontended);
@@ -704,7 +704,7 @@ public class ConcurrentIntObjectMap<V>
      * A padded cell for distributing counts.  Adapted from LongAdder
      * and Striped64.  See their internal docs for explanation.
      */
-    static final class CounterCell {
+    @sun.misc.Contended static final class CounterCell {
         volatile long value;
         CounterCell(long x) { value = x; }
     }
@@ -723,7 +723,7 @@ public class ConcurrentIntObjectMap<V>
 
     // See LongAdder version for explanation
     private final void fullAddCount(long x, boolean wasUncontended) {
-        int h = random.nextInt();
+        int h = ThreadLocalRandom.current().nextInt();
         boolean collide = false;                // True if last slot nonempty
         for (;;) {
             CounterCell[] as; CounterCell a; int n; long v;
@@ -775,7 +775,7 @@ public class ConcurrentIntObjectMap<V>
                     collide = false;
                     continue;                   // Retry with expanded table
                 }
-                h = random.nextInt();
+                h = ThreadLocalRandom.current().nextInt();
             }
             else if (cellsBusy == 0 && counterCells == as &&
                      U.compareAndSwapInt(this, CELLSBUSY, 0, 1)) {
