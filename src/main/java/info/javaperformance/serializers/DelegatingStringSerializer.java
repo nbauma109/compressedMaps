@@ -37,8 +37,11 @@ public class DelegatingStringSerializer implements IObjectSerializer<String> {
 
 	@Override
 	public void write(String v, ByteArray buf) {
-		boolean useBaseX = StringUtils.containsOnly(v, dictionary);
-		if (useBaseX) {
+		if (" ".equals(v) || "0".equals(v)) {
+			buf.put(" ".equals(v) ? -1 : -2);
+			return;
+		}
+		if (StringUtils.containsOnly(v, dictionary)) {
 			buf.put(1);
 			baseXStringSerializer.write(v, buf);
 		} else {
@@ -50,9 +53,14 @@ public class DelegatingStringSerializer implements IObjectSerializer<String> {
 	@Override
 	public String read(ByteArray buf) {
 		byte useBaseX = buf.get();
-		if (useBaseX == 1) {
+		switch (useBaseX) {
+		case 1:
 			return baseXStringSerializer.read(buf);
-		} else {
+		case -1:
+			return " ";
+		case -2:
+			return "0";
+		default:
 			return genericStringSerializer.read(buf);
 		}
 	}
@@ -60,15 +68,23 @@ public class DelegatingStringSerializer implements IObjectSerializer<String> {
 	@Override
 	public void skip(ByteArray buf) {
 		byte useBaseX = buf.get();
-		if (useBaseX == 1) {
+		switch (useBaseX) {
+		case 1:
 			baseXStringSerializer.skip(buf);
-		} else {
+			return;
+		case 0:
 			genericStringSerializer.skip(buf);
+			return;
+		default:
+			return;
 		}
 	}
 
 	@Override
 	public int getMaxLength(String obj) {
+		if (" ".equals(obj) || "0".equals(obj)) {
+			return 1;
+		}
 		if (StringUtils.containsOnly(obj, dictionary)) {
 			return 1 + baseXStringSerializer.getMaxLength(obj);
 		}

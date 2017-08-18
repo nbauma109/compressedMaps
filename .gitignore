@@ -3,3 +3,5 @@
 out
 .gitignore
 todo.txt
+/target/
+/bin/
