@@ -45,10 +45,19 @@ public class BaseXStringSerializer implements IObjectSerializer<String> {
 		}
 		BigInteger bigInt = baseX.decode(v);
 		byte[] bytes = bigInt.toByteArray();
-		byte leadingZeros = (byte) (v.length() - baseX.encode(bigInt).length());
+		byte leadingZeros = countLeadingZeros(v);
 		buf.put((byte) bytes.length);
 		buf.put(bytes, 0, bytes.length);
 		buf.put(leadingZeros);
+	}
+
+	public static byte countLeadingZeros(String v) {
+		byte leadingZeros = 0;
+		int i = 0;
+		while (i < v.length() && v.charAt(i++) == '0') {
+			leadingZeros++;
+		}
+		return leadingZeros;
 	}
 
 	@Override
@@ -80,5 +89,12 @@ public class BaseXStringSerializer implements IObjectSerializer<String> {
 	public int getMaxLength(String obj) {
 		BigInteger bigInt = baseX.decode(obj);
 		return bigInt.bitLength() / 8 + 3;
+	}
+
+	public static void main(String[] args) {
+		System.out.println(countLeadingZeros("07876"));
+		System.out.println(countLeadingZeros("7876"));
+		System.out.println(countLeadingZeros("0007876"));
+		System.out.println(countLeadingZeros("00"));
 	}
 }
