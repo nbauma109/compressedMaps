@@ -54,7 +54,7 @@ public class BaseXStringSerializer implements IObjectSerializer<String> {
 	public static byte countLeadingZeros(String v) {
 		byte leadingZeros = 0;
 		int i = 0;
-		while (i < v.length() && v.charAt(i++) == '0') {
+		while (i < v.length() - 1 && v.charAt(i++) == '0') {
 			leadingZeros++;
 		}
 		return leadingZeros;
