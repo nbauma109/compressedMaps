@@ -34,7 +34,7 @@ public class IntFloatConcurrentChainedMapTest extends TestCase
     private static final float NOT_PRESENT = 0;
 
     private static final float[] FF = { 0.5f, 1, 5, 16 };
-    private static final int[] THREADS = { 1, 2, 4, 8, 16, 32 };
+    private static final int[] THREADS = {  4, 8, 16, 32 };
 
 
     protected IIntFloatConcurrentMap getMap( final int size, final float ff )

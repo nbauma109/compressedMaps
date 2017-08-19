@@ -5,3 +5,5 @@ out
 todo.txt
 /target/
 /bin/
+/.classpath
+/.project
