@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 public class GenericBigIntegerSerializerTest extends TestCase {
 
 	public void testConcurrent() throws InterruptedException {
-		final int THREADS = 32;
+		final int THREADS = 3;
 		final GenericBigIntegerSerializer s = new GenericBigIntegerSerializer();
 		final CountDownLatch start = new CountDownLatch(THREADS);
 		final CountDownLatch end = new CountDownLatch(THREADS);
@@ -32,7 +32,6 @@ public class GenericBigIntegerSerializerTest extends TestCase {
 					for (int j = 0; j < 100000; ++j) {
 						assertEquals(BigInteger.valueOf(j).add(BigInteger.valueOf(id)), s.read(buf));
 					}
-					System.out.println(buf.position());
 					end.countDown();
 				}
 			};

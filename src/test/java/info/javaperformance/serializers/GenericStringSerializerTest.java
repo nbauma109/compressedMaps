@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 
 public class GenericStringSerializerTest extends TestCase {
 	public void testConcurrent() throws InterruptedException {
-		final int THREADS = 16;
+		final int THREADS = 3;
 		final GenericStringSerializer s = new GenericStringSerializer(StandardCharsets.UTF_8);
 		final CountDownLatch start = new CountDownLatch(THREADS);
 		final CountDownLatch end = new CountDownLatch(THREADS);
