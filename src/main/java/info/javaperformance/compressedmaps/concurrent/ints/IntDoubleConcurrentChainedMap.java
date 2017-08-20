@@ -68,6 +68,7 @@ import sun.misc.Unsafe;
  * ({@code get/put/remove}) join rehashing once they detect it is going on. No
  * thread can update the map state once rehashing has started.
  */
+@SuppressWarnings("restriction")
 public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 	private static final int CPU_NUMBER = Runtime.getRuntime().availableProcessors();
 	private static final double NO_VALUE = 0;
@@ -117,7 +118,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 
 	/**
 	 * Create a map with a given size, fill factor and key/value serializers
-	 * 
+	 *
 	 * @param size
 	 *            Expected map size
 	 * @param fillFactor
@@ -174,7 +175,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 
 	/**
 	 * Get block by bucket
-	 * 
+	 *
 	 * @param bucket
 	 *            Bucket
 	 * @return Block
@@ -313,7 +314,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 
 	/**
 	 * Write a single entry bucket
-	 * 
+	 *
 	 * @param output
 	 *            Use this block for output (it has enough space)
 	 * @param key
@@ -334,7 +335,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 	/**
 	 * Add key/value to a given chain. A chain is locked during the operation,
 	 * so it can be safely updated
-	 * 
+	 *
 	 * @param bucket
 	 *            An existing chain
 	 * @param key
@@ -411,7 +412,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 	 * This is a special version of previous method which deals with chains of
 	 * possibly over 127 elements. Add key/value to a given chain. A chain is
 	 * locked during the operation, so it can be safely updated
-	 * 
+	 *
 	 * @param iter
 	 *            Input iterator
 	 * @param inputBlock
@@ -554,7 +555,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 	 * Remove a given key from a chain. 2 special cases are supported: 1) key
 	 * not found - same chain is returned 2) removal from a 1-entry long chain -
 	 * null chain is returned with a valid retValue
-	 * 
+	 *
 	 * @param bucket
 	 *            Existing chain
 	 * @param key
@@ -627,24 +628,24 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 	/*
 	 * Rehashing: new_table is initialized. 'get', 'put' and 'remove' check that
 	 * resize is on and help other threads.
-	 * 
+	 *
 	 * Updates: if CAS in the 'put' fails, check if new_table is allocated -
 	 * help resizing and then execute 'put' Same for 'remove'
-	 * 
+	 *
 	 * Resize: Increase the number of workers. Each participating thread start
 	 * from random pos and wrap around until the same pos to reduce contention.
 	 * On non-empty record : CAS replace the current value with REPLACED and
 	 * copy data to the new map. Special case: If bucket length = 1, we do not
 	 * need to transfer the chain. Instead we can move the {@code long} key
 	 * right to the correct bucket in the new map (provided it is empty).
-	 * 
+	 *
 	 * Once finished iteration, reduce the number of workers. The last one moves
 	 * new table to the current state.
 	 */
 
 	/**
 	 * Help rehashing the table.
-	 * 
+	 *
 	 * @param nextStableVersion
 	 *            Leave this method once the current version is greater or equal
 	 */
@@ -680,7 +681,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 
 	/**
 	 * Actual data transfer during rehashing happens here
-	 * 
+	 *
 	 * @param buffers
 	 *            Current data object
 	 */
@@ -748,7 +749,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 
 	/**
 	 * Get the bucket index for the given key
-	 * 
+	 *
 	 * @param key
 	 *            A key
 	 * @param tabSize
@@ -783,7 +784,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 		/**
 		 * Initialize an iterator by a buffer. This method will reads the number
 		 * of entries if {@code chainLength == 0xFF}
-		 * 
+		 *
 		 * @param buf
 		 *            Byte buffer
 		 * @param chainLength
@@ -800,7 +801,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 
 		/**
 		 * Check if there are any not read entries left in the bucket
-		 * 
+		 *
 		 * @return True if we can advance, false otherwise
 		 */
 		public boolean hasNext() {
@@ -831,7 +832,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 
 		/**
 		 * method for looking up a value for a given key.
-		 * 
+		 *
 		 * @param key
 		 *            Key to look up
 		 * @param noValue
@@ -916,7 +917,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 		 * Reset a writer (useful if you need to write multiple entries in one
 		 * method call). This method does not write the element count into the
 		 * bucket (caller should take care of it)
-		 * 
+		 *
 		 * @param buf
 		 *            Underlying byte buffer
 		 * @return this
@@ -928,7 +929,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 		/**
 		 * Reset a writer (useful if you need to write multiple entries in one
 		 * method call)
-		 * 
+		 *
 		 * @param buf
 		 *            Underlying byte buffer
 		 * @param elems
@@ -949,7 +950,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 
 		/**
 		 * Write a key-value pair
-		 * 
+		 *
 		 * @param k
 		 *            Key to write
 		 * @param v
@@ -974,7 +975,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 		/**
 		 * Helper method to transfer an entry from iterator to writer. We always
 		 * take the iterator key as a key.
-		 * 
+		 *
 		 * @param iter
 		 *            Iterator standing prior to a value
 		 */
@@ -1017,7 +1018,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 	/**
 	 * Get a thread local iterator. Iterators do not depend on any inner map
 	 * fields, so they could be safely used on per-thread basis.
-	 * 
+	 *
 	 * @return A cached iterator object
 	 */
 	private Iterator getIterator() {
@@ -1030,7 +1031,7 @@ public class IntDoubleConcurrentChainedMap implements IIntDoubleConcurrentMap {
 
 	/**
 	 * Get a cached writer for the current thread
-	 * 
+	 *
 	 * @return A cached writer for the current thread
 	 */
 	private Writer getWriter() {

@@ -16,6 +16,7 @@ import sun.misc.Unsafe;
  * @param <V>
  *            Value type
  */
+@SuppressWarnings("restriction")
 @Deprecated
 public class ConcurrentIntObjectMap<V> {
 
