@@ -17,7 +17,7 @@ public class GenericBigIntegerSerializerTest extends TestCase {
 			final Runnable task = new Runnable() {
 				@Override
 				public void run() {
-					final ByteArray buf = new ByteArray().reset(new byte[367166]);
+					final ByteArray buf = new ByteArray().reset(new byte[1374]);
 					start.countDown();
 					try {
 						start.await();
@@ -25,11 +25,11 @@ public class GenericBigIntegerSerializerTest extends TestCase {
 						e.printStackTrace();
 					}
 					buf.position(0);
-					for (int j = 0; j < 100000; ++j) {
+					for (int j = 0; j < 500; ++j) {
 						s.write(BigInteger.valueOf(j).add(BigInteger.valueOf(id)), buf);
 					}
 					buf.position(0);
-					for (int j = 0; j < 100000; ++j) {
+					for (int j = 0; j < 500; ++j) {
 						assertEquals(BigInteger.valueOf(j).add(BigInteger.valueOf(id)), s.read(buf));
 					}
 					end.countDown();
