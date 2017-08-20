@@ -1,9 +1,9 @@
 package info.javaperformance.serializers;
 
-import junit.framework.TestCase;
-
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CountDownLatch;
+
+import junit.framework.TestCase;
 
 public class GenericStringSerializerTest extends TestCase {
     public void testConcurrent() throws InterruptedException {

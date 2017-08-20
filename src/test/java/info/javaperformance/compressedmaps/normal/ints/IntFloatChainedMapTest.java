@@ -19,12 +19,13 @@
 
 package info.javaperformance.compressedmaps.normal.ints;
 
-import info.javaperformance.compressedmaps.IntMapFactory;
-import junit.framework.TestCase;
 import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+
+import info.javaperformance.compressedmaps.IntMapFactory;
+import junit.framework.TestCase;
 
 public class IntFloatChainedMapTest extends TestCase
 {

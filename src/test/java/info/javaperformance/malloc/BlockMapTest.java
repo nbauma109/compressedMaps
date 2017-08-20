@@ -19,11 +19,11 @@
 
 package info.javaperformance.malloc;
 
-import junit.framework.TestCase;
-
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import junit.framework.TestCase;
 
 public class BlockMapTest extends TestCase
 {

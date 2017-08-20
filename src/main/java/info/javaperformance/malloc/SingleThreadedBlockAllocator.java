@@ -19,9 +19,9 @@
 
 package info.javaperformance.malloc;
 
-import info.javaperformance.buckets.Buckets;
-
 import java.util.ArrayDeque;
+
+import info.javaperformance.buckets.Buckets;
 
 public class SingleThreadedBlockAllocator {
     public static final long DEFAULT_RECYCLE_BOUND = 32 * 1024;

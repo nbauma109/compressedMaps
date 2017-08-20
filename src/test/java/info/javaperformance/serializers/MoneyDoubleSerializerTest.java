@@ -19,9 +19,9 @@
 
 package info.javaperformance.serializers;
 
-import junit.framework.TestCase;
-
 import java.math.BigDecimal;
+
+import junit.framework.TestCase;
 
 public class MoneyDoubleSerializerTest extends TestCase {
     public void testSimple()

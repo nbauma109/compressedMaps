@@ -19,14 +19,14 @@
 
 package info.javaperformance.serializers;
 
-import info.javaperformance.tools.VarLen;
-
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
+
+import info.javaperformance.tools.VarLen;
 
 /**
  * String serializer accepting an encoding as an argument

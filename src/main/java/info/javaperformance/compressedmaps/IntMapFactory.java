@@ -19,10 +19,36 @@
 
 package info.javaperformance.compressedmaps;
 
-import info.javaperformance.compressedmaps.normal.ints.*;
-import info.javaperformance.compressedmaps.concurrent.ints.*;
-import info.javaperformance.serializers.*;
+import info.javaperformance.compressedmaps.concurrent.ints.IIntDoubleConcurrentMap;
+import info.javaperformance.compressedmaps.concurrent.ints.IIntFloatConcurrentMap;
+import info.javaperformance.compressedmaps.concurrent.ints.IIntIntConcurrentMap;
+import info.javaperformance.compressedmaps.concurrent.ints.IIntLongConcurrentMap;
+import info.javaperformance.compressedmaps.concurrent.ints.IIntObjectConcurrentMap;
+import info.javaperformance.compressedmaps.concurrent.ints.IntDoubleConcurrentChainedMap;
+import info.javaperformance.compressedmaps.concurrent.ints.IntFloatConcurrentChainedMap;
+import info.javaperformance.compressedmaps.concurrent.ints.IntIntConcurrentChainedMap;
+import info.javaperformance.compressedmaps.concurrent.ints.IntLongConcurrentChainedMap;
+import info.javaperformance.compressedmaps.concurrent.ints.IntObjectConcurrentChainedMap;
+import info.javaperformance.compressedmaps.normal.ints.IIntDoubleMap;
+import info.javaperformance.compressedmaps.normal.ints.IIntFloatMap;
+import info.javaperformance.compressedmaps.normal.ints.IIntIntMap;
+import info.javaperformance.compressedmaps.normal.ints.IIntLongMap;
+import info.javaperformance.compressedmaps.normal.ints.IIntObjectMap;
+import info.javaperformance.compressedmaps.normal.ints.IntDoubleChainedMap;
+import info.javaperformance.compressedmaps.normal.ints.IntFloatChainedMap;
+import info.javaperformance.compressedmaps.normal.ints.IntIntChainedMap;
+import info.javaperformance.compressedmaps.normal.ints.IntLongChainedMap;
+import info.javaperformance.compressedmaps.normal.ints.IntObjectChainedMap;
 import info.javaperformance.malloc.SingleThreadedBlockAllocator;
+import info.javaperformance.serializers.DefaultDoubleSerializer;
+import info.javaperformance.serializers.DefaultFloatSerializer;
+import info.javaperformance.serializers.DefaultIntSerializer;
+import info.javaperformance.serializers.DefaultLongSerializer;
+import info.javaperformance.serializers.IDoubleSerializer;
+import info.javaperformance.serializers.IFloatSerializer;
+import info.javaperformance.serializers.IIntSerializer;
+import info.javaperformance.serializers.ILongSerializer;
+import info.javaperformance.serializers.IObjectSerializer;
 
 /**
  * The entry point for all map users. This class provides the factory methods which allow you to create

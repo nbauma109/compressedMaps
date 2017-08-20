@@ -19,11 +19,11 @@
 
 package info.javaperformance.compressedmaps.concurrent.ints;
 
-import info.javaperformance.compressedmaps.IntMapFactory;
-import junit.framework.TestCase;
-
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import info.javaperformance.compressedmaps.IntMapFactory;
+import junit.framework.TestCase;
 
 public class IntFloatConcurrentChainedMapTest extends TestCase
 {

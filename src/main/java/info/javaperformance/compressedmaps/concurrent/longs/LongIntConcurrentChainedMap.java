@@ -19,14 +19,15 @@
 
 package info.javaperformance.compressedmaps.concurrent.longs;
 
-import info.javaperformance.malloc.Block;
-import info.javaperformance.malloc.ConcurrentBlockAllocator;
-import info.javaperformance.serializers.*;
-import info.javaperformance.tools.Buffers;
-import info.javaperformance.tools.LongAllocator;
-import info.javaperformance.tools.Primes;
-import info.javaperformance.tools.Tools;
-import sun.misc.Unsafe;
+import static info.javaperformance.buckets.LongBucketEncoding.EMPTY;
+import static info.javaperformance.buckets.LongBucketEncoding.MAX_ENCODED_LENGTH;
+import static info.javaperformance.buckets.LongBucketEncoding.RELOCATED;
+import static info.javaperformance.buckets.LongBucketEncoding.getBlockIndex;
+import static info.javaperformance.buckets.LongBucketEncoding.getBlockLength;
+import static info.javaperformance.buckets.LongBucketEncoding.getOffset;
+import static info.javaperformance.buckets.LongBucketEncoding.pack;
+import static info.javaperformance.tools.VarLen.readUnsignedInt;
+import static info.javaperformance.tools.VarLen.writeUnsignedInt;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -35,9 +36,16 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.LockSupport;
 
-import static info.javaperformance.buckets.LongBucketEncoding.*;
-import static info.javaperformance.tools.VarLen.readUnsignedInt;
-import static info.javaperformance.tools.VarLen.writeUnsignedInt;
+import info.javaperformance.malloc.Block;
+import info.javaperformance.malloc.ConcurrentBlockAllocator;
+import info.javaperformance.serializers.ByteArray;
+import info.javaperformance.serializers.IIntSerializer;
+import info.javaperformance.serializers.ILongSerializer;
+import info.javaperformance.tools.Buffers;
+import info.javaperformance.tools.LongAllocator;
+import info.javaperformance.tools.Primes;
+import info.javaperformance.tools.Tools;
+import sun.misc.Unsafe;
 
 /**
  * A primitive concurrent hash map.

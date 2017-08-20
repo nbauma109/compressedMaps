@@ -1,10 +1,10 @@
 package info.javaperformance.tools;
 
-import sun.misc.Unsafe;
-
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+
+import sun.misc.Unsafe;
 
 /**
  * This class is derived from Java 8 ConcurrentHashMap.

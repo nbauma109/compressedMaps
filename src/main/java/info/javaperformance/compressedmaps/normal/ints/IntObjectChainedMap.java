@@ -19,17 +19,19 @@
 
 package info.javaperformance.compressedmaps.normal.ints;
 
-import info.javaperformance.buckets.Buckets;
-import info.javaperformance.malloc.SingleThreadedBlock;
-import info.javaperformance.malloc.SingleThreadedBlockAllocator;
-import info.javaperformance.serializers.*;
-import info.javaperformance.tools.Primes;
-import info.javaperformance.tools.Tools;
+import static info.javaperformance.tools.VarLen.readUnsignedInt;
+import static info.javaperformance.tools.VarLen.writeUnsignedInt;
 
 import java.util.Objects;
 
-import static info.javaperformance.tools.VarLen.readUnsignedInt;
-import static info.javaperformance.tools.VarLen.writeUnsignedInt;
+import info.javaperformance.buckets.Buckets;
+import info.javaperformance.malloc.SingleThreadedBlock;
+import info.javaperformance.malloc.SingleThreadedBlockAllocator;
+import info.javaperformance.serializers.ByteArray;
+import info.javaperformance.serializers.IIntSerializer;
+import info.javaperformance.serializers.IObjectSerializer;
+import info.javaperformance.tools.Primes;
+import info.javaperformance.tools.Tools;
 
 /**
  * A simple single threaded compressed map. It uses {@code int[]} instead of {@code long[]} for buckets

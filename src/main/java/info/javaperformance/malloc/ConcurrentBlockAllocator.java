@@ -19,10 +19,10 @@
 
 package info.javaperformance.malloc;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import info.javaperformance.buckets.LongBucketEncoding;
 import info.javaperformance.tools.ConcurrentIntObjectMap;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Memory block allocator for concurrent maps.
