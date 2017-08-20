@@ -36,7 +36,7 @@ public class IntBigIntegerChainedMapTest extends TestCase {
 	private static final BigInteger NOT_PRESENT = null;
 
 	protected IIntObjectMap<BigInteger> makeMap(final long size, final float fillFactor) {
-		return IntMapFactory.singleThreadedIntObjectMap(size, fillFactor, new GenericBigIntegerSerializer());
+		return IntMapFactory.synchronizedIntObjectMap(size, fillFactor, new GenericBigIntegerSerializer());
 	}
 
 	/**

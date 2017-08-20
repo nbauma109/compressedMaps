@@ -36,7 +36,7 @@ public class IntObjectChainedMapTest extends TestCase {
 	private static final String NOT_PRESENT = null;
 
 	protected IIntObjectMap<String> makeMap(final long size, final float fillFactor) {
-		return IntMapFactory.singleThreadedIntObjectMap(size, fillFactor, new GenericStringSerializer(StandardCharsets.UTF_8));
+		return IntMapFactory.synchronizedIntObjectMap(size, fillFactor, new GenericStringSerializer(StandardCharsets.UTF_8));
 	}
 
 	/**

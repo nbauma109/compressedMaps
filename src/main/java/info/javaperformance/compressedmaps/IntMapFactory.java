@@ -55,47 +55,47 @@ public class IntMapFactory {
 	// Single threaded maps
 	/////////////////////////////////////////////////////////////
 
-	public static IIntIntMap singleThreadedIntIntMap(final long size, final float fillFactor) {
+	public static IIntIntMap synchronizedIntIntMap(final long size, final float fillFactor) {
 		return new IntIntChainedMap(size, fillFactor, DefaultIntSerializer.INSTANCE, DefaultIntSerializer.INSTANCE, SingleThreadedBlockAllocator.DEFAULT_RECYCLE_BOUND);
 	}
 
-	public static IIntIntMap singleThreadedIntIntMap(final long size, final float fillFactor, final IIntSerializer keySerializer, final IIntSerializer valueSerializer,
+	public static IIntIntMap synchronizedIntIntMap(final long size, final float fillFactor, final IIntSerializer keySerializer, final IIntSerializer valueSerializer,
 			final long blockCacheLimit) {
 		return new IntIntChainedMap(size, fillFactor, keySerializer, valueSerializer, blockCacheLimit);
 	}
 
-	public static IIntLongMap singleThreadedIntLongMap(final long size, final float fillFactor) {
+	public static IIntLongMap synchronizedIntLongMap(final long size, final float fillFactor) {
 		return new IntLongChainedMap(size, fillFactor, DefaultIntSerializer.INSTANCE, DefaultLongSerializer.INSTANCE, SingleThreadedBlockAllocator.DEFAULT_RECYCLE_BOUND);
 	}
 
-	public static IIntLongMap singleThreadedIntLongMap(final long size, final float fillFactor, final IIntSerializer keySerializer, final ILongSerializer valueSerializer,
+	public static IIntLongMap synchronizedIntLongMap(final long size, final float fillFactor, final IIntSerializer keySerializer, final ILongSerializer valueSerializer,
 			final long blockCacheLimit) {
 		return new IntLongChainedMap(size, fillFactor, keySerializer, valueSerializer, blockCacheLimit);
 	}
 
-	public static IIntFloatMap singleThreadedIntFloatMap(final long size, final float fillFactor) {
+	public static IIntFloatMap synchronizedIntFloatMap(final long size, final float fillFactor) {
 		return new IntFloatChainedMap(size, fillFactor, DefaultIntSerializer.INSTANCE, DefaultFloatSerializer.INSTANCE, SingleThreadedBlockAllocator.DEFAULT_RECYCLE_BOUND);
 	}
 
-	public static IIntFloatMap singleThreadedIntFloatMap(final long size, final float fillFactor, final IIntSerializer keySerializer, final IFloatSerializer valueSerializer,
+	public static IIntFloatMap synchronizedIntFloatMap(final long size, final float fillFactor, final IIntSerializer keySerializer, final IFloatSerializer valueSerializer,
 			final long blockCacheLimit) {
 		return new IntFloatChainedMap(size, fillFactor, keySerializer, valueSerializer, blockCacheLimit);
 	}
 
-	public static IIntDoubleMap singleThreadedIntDoubleMap(final long size, final float fillFactor) {
+	public static IIntDoubleMap synchronizedIntDoubleMap(final long size, final float fillFactor) {
 		return new IntDoubleChainedMap(size, fillFactor, DefaultIntSerializer.INSTANCE, DefaultDoubleSerializer.INSTANCE, SingleThreadedBlockAllocator.DEFAULT_RECYCLE_BOUND);
 	}
 
-	public static IIntDoubleMap singleThreadedIntDoubleMap(final long size, final float fillFactor, final IIntSerializer keySerializer, final IDoubleSerializer valueSerializer,
+	public static IIntDoubleMap synchronizedIntDoubleMap(final long size, final float fillFactor, final IIntSerializer keySerializer, final IDoubleSerializer valueSerializer,
 			final long blockCacheLimit) {
 		return new IntDoubleChainedMap(size, fillFactor, keySerializer, valueSerializer, blockCacheLimit);
 	}
 
-	public static <V> IIntObjectMap<V> singleThreadedIntObjectMap(final long size, final float fillFactor, final IObjectSerializer<V> valueSerializer) {
+	public static <V> IIntObjectMap<V> synchronizedIntObjectMap(final long size, final float fillFactor, final IObjectSerializer<V> valueSerializer) {
 		return new IntObjectChainedMap<>(size, fillFactor, DefaultIntSerializer.INSTANCE, valueSerializer, SingleThreadedBlockAllocator.DEFAULT_RECYCLE_BOUND);
 	}
 
-	public static <V> IIntObjectMap<V> singleThreadedIntObjectMap(final long size, final float fillFactor, final IIntSerializer keySerializer,
+	public static <V> IIntObjectMap<V> synchronizedIntObjectMap(final long size, final float fillFactor, final IIntSerializer keySerializer,
 			final IObjectSerializer<V> valueSerializer, final long blockCacheLimit) {
 		return new IntObjectChainedMap<>(size, fillFactor, keySerializer, valueSerializer, blockCacheLimit);
 	}

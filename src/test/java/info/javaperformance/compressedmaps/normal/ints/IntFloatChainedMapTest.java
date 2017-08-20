@@ -34,7 +34,7 @@ public class IntFloatChainedMapTest extends TestCase {
 	private static final float NOT_PRESENT = 0;
 
 	protected IIntFloatMap makeMap(final long size, final float fillFactor) {
-		return IntMapFactory.singleThreadedIntFloatMap(size, fillFactor);
+		return IntMapFactory.synchronizedIntFloatMap(size, fillFactor);
 	}
 
 	/**
