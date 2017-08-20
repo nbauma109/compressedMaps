@@ -137,13 +137,18 @@ public class DelegatingStringSerializer implements IObjectSerializer<String> {
 	private static final long LONG_BASE_36_MAX_LEN = Long.toString(Long.MAX_VALUE, 36).length();
 
 	private IObjectSerializer<String> genericStringSerializer;
-	private IObjectSerializer<String> baseXStringSerializer;
-	private char[] dictionary;
 
-	public DelegatingStringSerializer(char[] dictionary) {
-		this.dictionary = dictionary;
+	public DelegatingStringSerializer() {
 		genericStringSerializer = new GenericStringSerializer(Charset.forName("UTF-8"));
-		baseXStringSerializer = new BaseXStringSerializer(dictionary);
+	}
+
+	public static byte countLeadingZeros(String v) {
+		byte leadingZeros = 0;
+		int i = 0;
+		while (i < v.length() - 1 && v.charAt(i++) == '0') {
+			leadingZeros++;
+		}
+		return leadingZeros;
 	}
 
 	@Override
@@ -157,431 +162,428 @@ public class DelegatingStringSerializer implements IObjectSerializer<String> {
 			genericStringSerializer.write(v, buf);
 		} else if (v.length() < INT_BASE_10_MAX_LEN && StringUtils.containsOnly(v, BASE_10)) {
 			buf.put((byte) 10);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 10), buf);
 		} else if (v.length() < INT_BASE_11_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_11)) {
 			buf.put((byte) 11);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 11), buf);
 		} else if (v.length() < INT_BASE_12_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_12)) {
 			buf.put((byte) 12);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 12), buf);
 		} else if (v.length() < INT_BASE_13_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_13)) {
 			buf.put((byte) 13);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 13), buf);
 		} else if (v.length() < INT_BASE_14_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_14)) {
 			buf.put((byte) 14);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 14), buf);
 		} else if (v.length() < INT_BASE_15_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_15)) {
 			buf.put((byte) 15);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 15), buf);
 		} else if (v.length() < INT_BASE_16_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_16)) {
 			buf.put((byte) 16);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 16), buf);
 		} else if (v.length() < INT_BASE_17_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_17)) {
 			buf.put((byte) 17);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 17), buf);
 		} else if (v.length() < INT_BASE_18_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_18)) {
 			buf.put((byte) 18);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 18), buf);
 		} else if (v.length() < INT_BASE_19_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_19)) {
 			buf.put((byte) 19);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 19), buf);
 		} else if (v.length() < INT_BASE_20_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_20)) {
 			buf.put((byte) 20);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 20), buf);
 		} else if (v.length() < INT_BASE_21_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_21)) {
 			buf.put((byte) 21);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 21), buf);
 		} else if (v.length() < INT_BASE_22_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_22)) {
 			buf.put((byte) 22);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 22), buf);
 		} else if (v.length() < INT_BASE_23_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_23)) {
 			buf.put((byte) 23);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 23), buf);
 		} else if (v.length() < INT_BASE_24_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_24)) {
 			buf.put((byte) 24);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 24), buf);
 		} else if (v.length() < INT_BASE_25_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_25)) {
 			buf.put((byte) 25);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 25), buf);
 		} else if (v.length() < INT_BASE_26_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_26)) {
 			buf.put((byte) 26);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 26), buf);
 		} else if (v.length() < INT_BASE_27_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_27)) {
 			buf.put((byte) 27);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 27), buf);
 		} else if (v.length() < INT_BASE_28_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_28)) {
 			buf.put((byte) 28);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 28), buf);
 		} else if (v.length() < INT_BASE_29_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_29)) {
 			buf.put((byte) 29);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 29), buf);
 		} else if (v.length() < INT_BASE_30_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_30)) {
 			buf.put((byte) 30);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 30), buf);
 		} else if (v.length() < INT_BASE_31_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_31)) {
 			buf.put((byte) 31);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 31), buf);
 		} else if (v.length() < INT_BASE_32_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_32)) {
 			buf.put((byte) 32);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 32), buf);
 		} else if (v.length() < INT_BASE_33_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_33)) {
 			buf.put((byte) 33);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 33), buf);
 		} else if (v.length() < INT_BASE_34_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_34)) {
 			buf.put((byte) 34);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 34), buf);
 		} else if (v.length() < INT_BASE_35_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_35)) {
 			buf.put((byte) 35);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 35), buf);
 		} else if (v.length() < INT_BASE_36_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_36)) {
 			buf.put((byte) 36);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 36), buf);
 		} else if (v.length() < LONG_BASE_10_MAX_LEN && StringUtils.containsOnly(v, BASE_10)) {
 			buf.put((byte) -10);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 10), buf);
 		} else if (v.length() < LONG_BASE_11_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_11)) {
 			buf.put((byte) -11);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 11), buf);
 		} else if (v.length() < LONG_BASE_12_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_12)) {
 			buf.put((byte) -12);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 12), buf);
 		} else if (v.length() < LONG_BASE_13_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_13)) {
 			buf.put((byte) -13);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 13), buf);
 		} else if (v.length() < LONG_BASE_14_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_14)) {
 			buf.put((byte) -14);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 14), buf);
 		} else if (v.length() < LONG_BASE_15_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_15)) {
 			buf.put((byte) -15);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 15), buf);
 		} else if (v.length() < LONG_BASE_16_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_16)) {
 			buf.put((byte) -16);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 16), buf);
 		} else if (v.length() < LONG_BASE_17_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_17)) {
 			buf.put((byte) -17);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 17), buf);
 		} else if (v.length() < LONG_BASE_18_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_18)) {
 			buf.put((byte) -18);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 18), buf);
 		} else if (v.length() < LONG_BASE_19_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_19)) {
 			buf.put((byte) -19);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 19), buf);
 		} else if (v.length() < LONG_BASE_20_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_20)) {
 			buf.put((byte) -20);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 20), buf);
 		} else if (v.length() < LONG_BASE_21_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_21)) {
 			buf.put((byte) -21);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 21), buf);
 		} else if (v.length() < LONG_BASE_22_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_22)) {
 			buf.put((byte) -22);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 22), buf);
 		} else if (v.length() < LONG_BASE_23_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_23)) {
 			buf.put((byte) -23);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 23), buf);
 		} else if (v.length() < LONG_BASE_24_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_24)) {
 			buf.put((byte) -24);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 24), buf);
 		} else if (v.length() < LONG_BASE_25_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_25)) {
 			buf.put((byte) -25);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 25), buf);
 		} else if (v.length() < LONG_BASE_26_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_26)) {
 			buf.put((byte) -26);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 26), buf);
 		} else if (v.length() < LONG_BASE_27_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_27)) {
 			buf.put((byte) -27);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 27), buf);
 		} else if (v.length() < LONG_BASE_28_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_28)) {
 			buf.put((byte) -28);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 28), buf);
 		} else if (v.length() < LONG_BASE_29_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_29)) {
 			buf.put((byte) -29);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 29), buf);
 		} else if (v.length() < LONG_BASE_30_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_30)) {
 			buf.put((byte) -30);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 30), buf);
 		} else if (v.length() < LONG_BASE_31_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_31)) {
 			buf.put((byte) -31);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 31), buf);
 		} else if (v.length() < LONG_BASE_32_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_32)) {
 			buf.put((byte) -32);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 32), buf);
 		} else if (v.length() < LONG_BASE_33_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_33)) {
 			buf.put((byte) -33);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 33), buf);
 		} else if (v.length() < LONG_BASE_34_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_34)) {
 			buf.put((byte) -34);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 34), buf);
 		} else if (v.length() < LONG_BASE_35_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_35)) {
 			buf.put((byte) -35);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 35), buf);
 		} else if (v.length() < LONG_BASE_36_MAX_LEN && StringUtils.containsOnly(v, UPPER_CASE_BASE_36)) {
 			buf.put((byte) -36);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 36), buf);
 		} else if (v.length() < INT_BASE_11_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_11)) {
 			buf.put((byte) 101);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 11), buf);
 		} else if (v.length() < INT_BASE_12_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_12)) {
 			buf.put((byte) 102);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 12), buf);
 		} else if (v.length() < INT_BASE_13_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_13)) {
 			buf.put((byte) 103);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 13), buf);
 		} else if (v.length() < INT_BASE_14_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_14)) {
 			buf.put((byte) 104);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 14), buf);
 		} else if (v.length() < INT_BASE_15_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_15)) {
 			buf.put((byte) 105);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 15), buf);
 		} else if (v.length() < INT_BASE_16_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_16)) {
 			buf.put((byte) 106);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 16), buf);
 		} else if (v.length() < INT_BASE_17_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_17)) {
 			buf.put((byte) 107);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 17), buf);
 		} else if (v.length() < INT_BASE_18_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_18)) {
 			buf.put((byte) 108);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 18), buf);
 		} else if (v.length() < INT_BASE_19_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_19)) {
 			buf.put((byte) 109);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 19), buf);
 		} else if (v.length() < INT_BASE_20_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_20)) {
 			buf.put((byte) 110);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 20), buf);
 		} else if (v.length() < INT_BASE_21_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_21)) {
 			buf.put((byte) 111);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 21), buf);
 		} else if (v.length() < INT_BASE_22_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_22)) {
 			buf.put((byte) 112);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 22), buf);
 		} else if (v.length() < INT_BASE_23_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_23)) {
 			buf.put((byte) 113);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 23), buf);
 		} else if (v.length() < INT_BASE_24_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_24)) {
 			buf.put((byte) 114);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 24), buf);
 		} else if (v.length() < INT_BASE_25_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_25)) {
 			buf.put((byte) 115);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 25), buf);
 		} else if (v.length() < INT_BASE_26_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_26)) {
 			buf.put((byte) 116);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 26), buf);
 		} else if (v.length() < INT_BASE_27_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_27)) {
 			buf.put((byte) 117);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 27), buf);
 		} else if (v.length() < INT_BASE_28_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_28)) {
 			buf.put((byte) 118);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 28), buf);
 		} else if (v.length() < INT_BASE_29_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_29)) {
 			buf.put((byte) 119);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 29), buf);
 		} else if (v.length() < INT_BASE_30_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_30)) {
 			buf.put((byte) 120);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 30), buf);
 		} else if (v.length() < INT_BASE_31_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_31)) {
 			buf.put((byte) 121);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 31), buf);
 		} else if (v.length() < INT_BASE_32_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_32)) {
 			buf.put((byte) 122);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 32), buf);
 		} else if (v.length() < INT_BASE_33_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_33)) {
 			buf.put((byte) 123);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 33), buf);
 		} else if (v.length() < INT_BASE_34_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_34)) {
 			buf.put((byte) 124);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 34), buf);
 		} else if (v.length() < INT_BASE_35_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_35)) {
 			buf.put((byte) 125);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 35), buf);
 		} else if (v.length() < INT_BASE_36_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_36)) {
 			buf.put((byte) 126);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultIntSerializer.INSTANCE.write(Integer.parseInt(v, 36), buf);
 		} else if (v.length() < LONG_BASE_11_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_11)) {
 			buf.put((byte) -101);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 11), buf);
 		} else if (v.length() < LONG_BASE_12_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_12)) {
 			buf.put((byte) -102);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 12), buf);
 		} else if (v.length() < LONG_BASE_13_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_13)) {
 			buf.put((byte) -103);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 13), buf);
 		} else if (v.length() < LONG_BASE_14_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_14)) {
 			buf.put((byte) -104);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 14), buf);
 		} else if (v.length() < LONG_BASE_15_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_15)) {
 			buf.put((byte) -105);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 15), buf);
 		} else if (v.length() < LONG_BASE_16_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_16)) {
 			buf.put((byte) -106);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 16), buf);
 		} else if (v.length() < LONG_BASE_17_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_17)) {
 			buf.put((byte) -107);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 17), buf);
 		} else if (v.length() < LONG_BASE_18_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_18)) {
 			buf.put((byte) -108);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 18), buf);
 		} else if (v.length() < LONG_BASE_19_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_19)) {
 			buf.put((byte) -109);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 19), buf);
 		} else if (v.length() < LONG_BASE_20_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_20)) {
 			buf.put((byte) -110);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 20), buf);
 		} else if (v.length() < LONG_BASE_21_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_21)) {
 			buf.put((byte) -111);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 21), buf);
 		} else if (v.length() < LONG_BASE_22_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_22)) {
 			buf.put((byte) -112);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 22), buf);
 		} else if (v.length() < LONG_BASE_23_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_23)) {
 			buf.put((byte) -113);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 23), buf);
 		} else if (v.length() < LONG_BASE_24_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_24)) {
 			buf.put((byte) -114);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 24), buf);
 		} else if (v.length() < LONG_BASE_25_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_25)) {
 			buf.put((byte) -115);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 25), buf);
 		} else if (v.length() < LONG_BASE_26_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_26)) {
 			buf.put((byte) -116);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 26), buf);
 		} else if (v.length() < LONG_BASE_27_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_27)) {
 			buf.put((byte) -117);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 27), buf);
 		} else if (v.length() < LONG_BASE_28_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_28)) {
 			buf.put((byte) -118);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 28), buf);
 		} else if (v.length() < LONG_BASE_29_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_29)) {
 			buf.put((byte) -119);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 29), buf);
 		} else if (v.length() < LONG_BASE_30_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_30)) {
 			buf.put((byte) -120);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 30), buf);
 		} else if (v.length() < LONG_BASE_31_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_31)) {
 			buf.put((byte) -121);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 31), buf);
 		} else if (v.length() < LONG_BASE_32_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_32)) {
 			buf.put((byte) -122);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 32), buf);
 		} else if (v.length() < LONG_BASE_33_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_33)) {
 			buf.put((byte) -123);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 33), buf);
 		} else if (v.length() < LONG_BASE_34_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_34)) {
 			buf.put((byte) -124);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 34), buf);
 		} else if (v.length() < LONG_BASE_35_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_35)) {
 			buf.put((byte) -125);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 35), buf);
 		} else if (v.length() < LONG_BASE_36_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_36)) {
 			buf.put((byte) -126);
-			buf.put(BaseXStringSerializer.countLeadingZeros(v));
+			buf.put(countLeadingZeros(v));
 			DefaultLongSerializer.INSTANCE.write(Long.parseLong(v, 36), buf);
-		} else if (StringUtils.containsOnly(v, dictionary)) {
-			buf.put((byte) 1);
-			baseXStringSerializer.write(v, buf);
 		} else {
 			buf.put((byte) 0);
 			genericStringSerializer.write(v, buf);
@@ -803,8 +805,6 @@ public class DelegatingStringSerializer implements IObjectSerializer<String> {
 			return StringUtils.repeat("0", buf.get()) + Long.toString(DefaultLongSerializer.INSTANCE.read(buf), 35).toLowerCase();
 		case -126:
 			return StringUtils.repeat("0", buf.get()) + Long.toString(DefaultLongSerializer.INSTANCE.read(buf), 36).toLowerCase();
-		case 1:
-			return baseXStringSerializer.read(buf);
 		case -1:
 			return " ";
 		case -2:
@@ -928,9 +928,6 @@ public class DelegatingStringSerializer implements IObjectSerializer<String> {
 		case -126:
 			buf.position(buf.position() + 1);
 			DefaultLongSerializer.INSTANCE.skip(buf);
-			return;
-		case 1:
-			baseXStringSerializer.skip(buf);
 			return;
 		case 0:
 			genericStringSerializer.skip(buf);
@@ -1159,8 +1156,6 @@ public class DelegatingStringSerializer implements IObjectSerializer<String> {
 			return DefaultLongSerializer.INSTANCE.getMaxLength() + 2;
 		} else if (v.length() < LONG_BASE_36_MAX_LEN && StringUtils.containsOnly(v, LOWER_CASE_BASE_36)) {
 			return DefaultLongSerializer.INSTANCE.getMaxLength() + 2;
-		} else if (StringUtils.containsOnly(v, dictionary)) {
-			return baseXStringSerializer.getMaxLength(v) + 1;
 		} else {
 			return genericStringSerializer.getMaxLength(v) + 1;
 		}

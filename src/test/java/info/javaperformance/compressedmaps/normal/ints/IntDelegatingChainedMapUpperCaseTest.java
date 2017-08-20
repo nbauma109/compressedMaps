@@ -35,7 +35,7 @@ public class IntDelegatingChainedMapUpperCaseTest extends TestCase {
 	private static final String NOT_PRESENT = null;
 
 	protected IIntObjectMap<String> makeMap(final long size, final float fillFactor) {
-		return IntMapFactory.singleThreadedIntObjectMap(size, fillFactor, new DelegatingStringSerializer("0123456789Cx".toCharArray()));
+		return IntMapFactory.singleThreadedIntObjectMap(size, fillFactor, new DelegatingStringSerializer());
 	}
 
 	/**

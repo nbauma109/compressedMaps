@@ -3,12 +3,11 @@ package info.javaperformance.serializers;
 import java.util.concurrent.CountDownLatch;
 
 import junit.framework.TestCase;
-import uk.co.maxant.util.BaseX;
 
 public class DelegatingStringSerializerTest extends TestCase {
 	public void testConcurrent() throws InterruptedException {
 		final int THREADS = 32;
-		final DelegatingStringSerializer s = new DelegatingStringSerializer(BaseX.DICTIONARY_16);
+		final DelegatingStringSerializer s = new DelegatingStringSerializer();
 		final CountDownLatch start = new CountDownLatch(THREADS);
 		final CountDownLatch end = new CountDownLatch(THREADS);
 		for (int i = 0; i < THREADS; ++i) {

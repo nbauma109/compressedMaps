@@ -25,9 +25,13 @@ import java.util.concurrent.TimeUnit;
 import info.javaperformance.compressedmaps.IntMapFactory;
 import info.javaperformance.serializers.DelegatingStringSerializer;
 import junit.framework.TestCase;
-import uk.co.maxant.util.BaseX;
 
 public class IntDelegatingConcurrentChainedMapStringTest extends TestCase {
+
+	public static final char[] DICTIONARY_89 = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+			'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+			'v', 'w', 'x', 'y', 'z', '+', '"', '@', '*', '#', '%', '&', '/', '|', '(', ')', '=', '?', '~', '[', ']', '{', '}', '$', '-', '_', '.', ':', ',', ';', '<', '>' };
+
 	private static final int PUT_MAP_SIZE = 1000 * 1000;
 	private static final int INITIAL_CAPACITY = 1;
 	private static final String ONE = "1";
@@ -38,7 +42,7 @@ public class IntDelegatingConcurrentChainedMapStringTest extends TestCase {
 	private static final int[] THREADS = { 4, 8, 16, 32 };
 
 	protected IIntObjectConcurrentMap<String> getMap(final int size, final float ff) {
-		return IntMapFactory.concurrentIntObjectMap(size, ff, new DelegatingStringSerializer(BaseX.DICTIONARY_89));
+		return IntMapFactory.concurrentIntObjectMap(size, ff, new DelegatingStringSerializer());
 	}
 
 	/*
@@ -71,7 +75,7 @@ public class IntDelegatingConcurrentChainedMapStringTest extends TestCase {
 			// now check the final state
 			assertEquals(SECTION * threads, map.size());
 			for (int n = 0; n < SECTION * threads; ++n) {
-				assertEquals(String.valueOf(n) + "000" + BaseX.DICTIONARY_89[n % 89], map.get(n));
+				assertEquals(String.valueOf(n) + "000" + DICTIONARY_89[n % 89], map.get(n));
 			}
 		}
 		// update section
@@ -115,8 +119,8 @@ public class IntDelegatingConcurrentChainedMapStringTest extends TestCase {
 				m_startGate.countDown();
 				m_startGate.await();
 				for (int n = m_from; n < m_to; ++n) {
-					assertEquals(NOT_PRESENT, m_map.put(n, String.valueOf(n) + "000" + BaseX.DICTIONARY_89[n % 89]));
-					assertEquals(String.valueOf(n) + "000" + BaseX.DICTIONARY_89[n % 89], m_map.get(n));
+					assertEquals(NOT_PRESENT, m_map.put(n, String.valueOf(n) + "000" + DICTIONARY_89[n % 89]));
+					assertEquals(String.valueOf(n) + "000" + DICTIONARY_89[n % 89], m_map.get(n));
 				}
 			} catch (Throwable e) {
 				e.printStackTrace();
@@ -146,7 +150,7 @@ public class IntDelegatingConcurrentChainedMapStringTest extends TestCase {
 				m_startGate.countDown();
 				m_startGate.await();
 				for (int n = m_from; n < m_to; ++n) {
-					assertEquals(String.valueOf(n) + "000" + BaseX.DICTIONARY_89[n % 89], m_map.put(n, ONE));
+					assertEquals(String.valueOf(n) + "000" + DICTIONARY_89[n % 89], m_map.put(n, ONE));
 					assertEquals(ONE, m_map.get(n));
 				}
 			} catch (Throwable e) {

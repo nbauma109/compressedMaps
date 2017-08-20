@@ -37,7 +37,7 @@ public class IntDelegatingConcurrentChainedMapUpperCaseTest extends TestCase {
 	private static final int[] THREADS = { 4, 8, 16, 32 };
 
 	protected IIntObjectConcurrentMap<String> getMap(final int size, final float ff) {
-		return IntMapFactory.concurrentIntObjectMap(size, ff, new DelegatingStringSerializer("0123456789Cx".toCharArray()));
+		return IntMapFactory.concurrentIntObjectMap(size, ff, new DelegatingStringSerializer());
 	}
 
 	/*
