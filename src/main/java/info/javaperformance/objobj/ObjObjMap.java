@@ -30,7 +30,7 @@ public class ObjObjMap<K, V> {
 	private int m_mask2;
 
 	public ObjObjMap(final int size, final float fillFactor) {
-		if ((fillFactor <= 0) || (fillFactor >= 1)) {
+		if (fillFactor <= 0 || fillFactor >= 1) {
 			throw new IllegalArgumentException("FillFactor must be in (0, 1)");
 		}
 		if (size <= 0) {
@@ -38,7 +38,7 @@ public class ObjObjMap<K, V> {
 		}
 		final int capacity = Tools.arraySize(size, fillFactor);
 		m_mask = capacity - 1;
-		m_mask2 = (capacity * 2) - 1;
+		m_mask2 = capacity * 2 - 1;
 		m_fillFactor = fillFactor;
 
 		m_data = new Object[capacity * 2];
@@ -47,6 +47,7 @@ public class ObjObjMap<K, V> {
 		m_threshold = (int) (capacity * fillFactor);
 	}
 
+	@SuppressWarnings("unchecked")
 	public V get(final K key) {
 		if (key == null) {
 			return (V) m_nullValue; // we null it on remove, so safe not to
@@ -63,7 +64,7 @@ public class ObjObjMap<K, V> {
 			return (V) m_data[ptr + 1];
 		}
 		while (true) {
-			ptr = (ptr + 2) & m_mask2; // that's next index
+			ptr = ptr + 2 & m_mask2; // that's next index
 			k = m_data[ptr];
 			if (k == FREE_KEY) {
 				return null;
@@ -74,6 +75,7 @@ public class ObjObjMap<K, V> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public V put(final K key, final V value) {
 		if (key == null) {
 			return insertNullKey(value);
@@ -106,7 +108,7 @@ public class ObjObjMap<K, V> {
 		}
 
 		while (true) {
-			ptr = (ptr + 2) & m_mask2; // that's next index calculation
+			ptr = ptr + 2 & m_mask2; // that's next index calculation
 			k = m_data[ptr];
 			if (k == FREE_KEY) {
 				if (firstRemoved != -1) {
@@ -132,6 +134,7 @@ public class ObjObjMap<K, V> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public V remove(final K key) {
 		if (key == null) {
 			return removeNullKey();
@@ -145,7 +148,7 @@ public class ObjObjMap<K, V> {
 									// call
 		{
 			--m_size;
-			if (m_data[(ptr + 2) & m_mask2] == FREE_KEY) {
+			if (m_data[ptr + 2 & m_mask2] == FREE_KEY) {
 				m_data[ptr] = FREE_KEY;
 			} else {
 				m_data[ptr] = REMOVED_KEY;
@@ -155,13 +158,13 @@ public class ObjObjMap<K, V> {
 			return ret;
 		}
 		while (true) {
-			ptr = (ptr + 2) & m_mask2; // that's next index calculation
+			ptr = ptr + 2 & m_mask2; // that's next index calculation
 			k = m_data[ptr];
 			if (k == FREE_KEY) {
 				return null;
 			} else if (k.equals(key)) {
 				--m_size;
-				if (m_data[(ptr + 2) & m_mask2] == FREE_KEY) {
+				if (m_data[ptr + 2 & m_mask2] == FREE_KEY) {
 					m_data[ptr] = FREE_KEY;
 				} else {
 					m_data[ptr] = REMOVED_KEY;
@@ -173,6 +176,7 @@ public class ObjObjMap<K, V> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private V insertNullKey(final V value) {
 		if (m_hasNull) {
 			final Object ret = m_nullValue;
@@ -185,6 +189,7 @@ public class ObjObjMap<K, V> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private V removeNullKey() {
 		if (m_hasNull) {
 			final Object ret = m_nullValue;
@@ -201,9 +206,10 @@ public class ObjObjMap<K, V> {
 		return m_size;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void rehash(final int newCapacity) {
-		m_threshold = (int) ((newCapacity / 2) * m_fillFactor);
-		m_mask = (newCapacity / 2) - 1;
+		m_threshold = (int) (newCapacity / 2 * m_fillFactor);
+		m_mask = newCapacity / 2 - 1;
 		m_mask2 = newCapacity - 1;
 
 		final int oldCapacity = m_data.length;
@@ -216,7 +222,7 @@ public class ObjObjMap<K, V> {
 
 		for (int i = 0; i < oldCapacity; i += 2) {
 			final Object oldKey = oldData[i];
-			if ((oldKey != FREE_KEY) && (oldKey != REMOVED_KEY)) {
+			if (oldKey != FREE_KEY && oldKey != REMOVED_KEY) {
 				put((K) oldKey, (V) oldData[i + 1]);
 			}
 		}
