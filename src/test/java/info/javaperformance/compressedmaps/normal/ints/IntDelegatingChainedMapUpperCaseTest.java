@@ -28,7 +28,7 @@ import info.javaperformance.compressedmaps.IntMapFactory;
 import info.javaperformance.serializers.DelegatingStringSerializer;
 import junit.framework.TestCase;
 
-public class IntDelegatingChainedMapTest extends TestCase {
+public class IntDelegatingChainedMapUpperCaseTest extends TestCase {
 	// fill factors to be tested
 	private final static float[] FILL_FACTORS = { 0.25f, 0.5f, 0.75f, 0.9f, 0.99f, 1f, 2f, 3f, 5f, 16f };
 	private final int SIZE = 100000;
@@ -50,15 +50,15 @@ public class IntDelegatingChainedMapTest extends TestCase {
 	private void testPutHelper(final float fillFactor) {
 		final IIntObjectMap<String> map = makeMap(100, fillFactor);
 		for (int i = 0; i < SIZE; ++i) {
-			assertEquals(NOT_PRESENT, map.put(i, String.valueOf(i)));
+			assertEquals(NOT_PRESENT, map.put(i, Integer.toString(i, 36).toUpperCase()));
 
 			assertEquals(i + 1, map.size());
-			assertEquals(String.valueOf(i), map.get(i));
+			assertEquals(Integer.toString(i, 36).toUpperCase(), map.get(i));
 		}
 		// now check the final state
 		assertEquals(SIZE, map.size());
 		for (int i = 0; i < SIZE; ++i) {
-			assertEquals(String.valueOf(i), map.get(i));
+			assertEquals(Integer.toString(i, 36).toUpperCase(), map.get(i));
 		}
 	}
 
@@ -74,14 +74,14 @@ public class IntDelegatingChainedMapTest extends TestCase {
 	private void testPutNegative(final float fillFactor) {
 		final IIntObjectMap<String> map = makeMap(100, fillFactor);
 		for (int i = 0; i < SIZE; ++i) {
-			map.put(-i, String.valueOf(-i));
+			map.put(-i, Integer.toString(-i, 36).toUpperCase());
 			assertEquals(i + 1, map.size());
-			assertEquals(String.valueOf(-i), map.get(-i));
+			assertEquals(Integer.toString(-i, 36).toUpperCase(), map.get(-i));
 		}
 		// now check the final state
 		assertEquals(SIZE, map.size());
 		for (int i = 0; i < SIZE; ++i) {
-			assertEquals(String.valueOf(-i), map.get(-i));
+			assertEquals(Integer.toString(-i, 36).toUpperCase(), map.get(-i));
 		}
 	}
 
@@ -98,25 +98,25 @@ public class IntDelegatingChainedMapTest extends TestCase {
 	private void testPutThenUpdate(final float fillFactor) {
 		final IIntObjectMap<String> map = makeMap(100, fillFactor);
 		for (int i = 0; i < SIZE; ++i) {
-			assertEquals(NOT_PRESENT, map.put(i, String.valueOf(i)));
+			assertEquals(NOT_PRESENT, map.put(i, Integer.toString(i, 36).toUpperCase()));
 			assertEquals(i + 1, map.size());
-			assertEquals(String.valueOf(i), map.get(i));
+			assertEquals(Integer.toString(i, 36).toUpperCase(), map.get(i));
 		}
 		// now check the initial state
 		assertEquals(SIZE, map.size());
 		for (int i = 0; i < SIZE; ++i) {
-			assertEquals(String.valueOf(i), map.get(i));
+			assertEquals(Integer.toString(i, 36).toUpperCase(), map.get(i));
 		}
 
 		// now try to update all keys
 		for (int i = 0; i < SIZE; ++i) {
-			assertEquals(String.valueOf(i), map.put(i, String.valueOf(i + 1)));
+			assertEquals(Integer.toString(i, 36).toUpperCase(), map.put(i, Integer.toString(i + 1, 36).toUpperCase()));
 			assertEquals(SIZE, map.size());
-			assertEquals(String.valueOf(i + 1), map.get(i));
+			assertEquals(Integer.toString(i + 1, 36).toUpperCase(), map.get(i));
 		}
 		// and check the final state
 		for (int i = 0; i < SIZE; ++i) {
-			assertEquals(String.valueOf(i + 1), map.get(i));
+			assertEquals(Integer.toString(i + 1, 36).toUpperCase(), map.get(i));
 		}
 	}
 
@@ -146,14 +146,55 @@ public class IntDelegatingChainedMapTest extends TestCase {
 		}
 		final IIntObjectMap<String> map = makeMap(100, fillFactor);
 		for (i = 0; i < vals.length; ++i) {
-			assertEquals(NOT_PRESENT, map.put(vals[i], String.valueOf(vals[i])));
+			assertEquals(NOT_PRESENT, map.put(vals[i], Integer.toString(vals[i], 36).toUpperCase()));
 			assertEquals(i + 1, map.size());
-			assertEquals(String.valueOf(vals[i]), map.get(vals[i]));
+			assertEquals(Integer.toString(vals[i], 36).toUpperCase(), map.get(vals[i]));
 		}
 		// now check the final state
 		assertEquals(SIZE, map.size());
 		for (i = 0; i < vals.length; ++i) {
-			assertEquals(String.valueOf(vals[i]), map.get(vals[i]));
+			assertEquals(Integer.toString(vals[i], 36).toUpperCase(), map.get(vals[i]));
+		}
+	}
+
+	public void testPutRandomLong() {
+		for (final float ff : FILL_FACTORS) {
+			testPutRandomLong(ff);
+		}
+	}
+
+	private void testPutRandomLong(final float fillFactor) {
+		final int seed = ThreadLocalRandom.current().nextInt();
+		System.out.println("testPutRandomLong: ff = " + fillFactor + ", seed = " + seed);
+		final Random r = new Random(seed);
+		final Set<Integer> keySet = new LinkedHashSet<>(SIZE);
+		final Set<Long> valSet = new LinkedHashSet<>(SIZE);
+		final int[] keys = new int[SIZE];
+		final long[] vals = new long[SIZE];
+		while (keySet.size() < SIZE) {
+			keySet.add(r.nextInt());
+		}
+		while (valSet.size() < SIZE) {
+			valSet.add(r.nextLong());
+		}
+		int i = 0;
+		for (final Integer v : keySet) {
+			keys[i++] = v;
+		}
+		i = 0;
+		for (final Long v : valSet) {
+			vals[i++] = v;
+		}
+		final IIntObjectMap<String> map = makeMap(100, fillFactor);
+		for (i = 0; i < vals.length; ++i) {
+			assertEquals(NOT_PRESENT, map.put(keys[i], Long.toString(vals[i], 36).toUpperCase()));
+			assertEquals(i + 1, map.size());
+			assertEquals(Long.toString(vals[i], 36).toUpperCase(), map.get(keys[i]));
+		}
+		// now check the final state
+		assertEquals(SIZE, map.size());
+		for (i = 0; i < vals.length; ++i) {
+			assertEquals(Long.toString(vals[i], 36).toUpperCase(), map.get(keys[i]));
 		}
 	}
 
@@ -170,16 +211,16 @@ public class IntDelegatingChainedMapTest extends TestCase {
 		final IIntObjectMap<String> map = makeMap(100, fillFactor);
 		int addCnt = 0, removeCnt = 0;
 		for (int i = 0; i < SIZE; ++i) {
-			assertEquals(NOT_PRESENT, map.put(addCnt, String.valueOf(addCnt)));
+			assertEquals(NOT_PRESENT, map.put(addCnt, Integer.toString(addCnt, 36).toUpperCase()));
 			assertEquals(i + 1, map.size());
 			addCnt++;
 
-			assertEquals(NOT_PRESENT, map.put(addCnt, String.valueOf(addCnt)));
+			assertEquals(NOT_PRESENT, map.put(addCnt, Integer.toString(addCnt, 36).toUpperCase()));
 			assertEquals(i + 2, map.size()); // map grows by one element on each
 												// iteration
 			addCnt++;
 
-			assertEquals(String.valueOf(removeCnt), map.remove(removeCnt));
+			assertEquals(Integer.toString(removeCnt, 36).toUpperCase(), map.remove(removeCnt));
 			removeCnt++;
 
 			assertEquals(i + 1, map.size()); // map grows by one element on each
@@ -188,7 +229,7 @@ public class IntDelegatingChainedMapTest extends TestCase {
 
 		assertEquals(SIZE, map.size());
 		for (int i = removeCnt; i < addCnt; ++i) {
-			assertEquals(String.valueOf(i), map.get(i));
+			assertEquals(Integer.toString(i, 36).toUpperCase(), map.get(i));
 		}
 	}
 
@@ -211,7 +252,7 @@ public class IntDelegatingChainedMapTest extends TestCase {
 		assertEquals(SIZE, keys.length);
 
 		for (int i = 0; i < SIZE; ++i) {
-			values[i] = String.valueOf(r.nextInt());
+			values[i] = Integer.toString(r.nextInt(), 36).toUpperCase();
 		}
 
 		IIntObjectMap<String> m = makeMap(100, ff);
