@@ -170,19 +170,27 @@ public class IntDelegatingChainedMapBaseXTest extends TestCase {
 		final int seed = ThreadLocalRandom.current().nextInt();
 		System.out.println("testPutRandomString: ff = " + fillFactor + ", seed = " + seed);
 		final Random r = new Random(seed);
-		final Set<Integer> keySet = new LinkedHashSet<>(SIZE);
-		final Set<String> valSet = new LinkedHashSet<>(SIZE);
-		final int[] keys = new int[SIZE];
-		final String[] vals = new String[SIZE];
-		while (keySet.size() < SIZE) {
+		final Set<Integer> keySet = new LinkedHashSet<>(10 * SIZE);
+		final Set<String> valSet = new LinkedHashSet<>(10 * SIZE);
+		final int[] keys = new int[10 * SIZE];
+		final String[] vals = new String[10 * SIZE];
+		while (keySet.size() < 10 * SIZE) {
 			keySet.add(r.nextInt());
 		}
-		while (valSet.size() < SIZE) {
-			if (Math.random() > 0.5) {
-				valSet.add(RandomStringUtils.randomAlphanumeric((int) (Math.random() * 20)));
-			} else {
-				valSet.add(RandomStringUtils.randomAscii((int) (Math.random() * 5)));
-			}
+		while (valSet.size() < SIZE * 2) {
+			valSet.add(RandomStringUtils.randomNumeric((int) (Math.random() * 20)));
+		}
+		while (valSet.size() < SIZE * 4) {
+			valSet.add(RandomStringUtils.randomAlphanumeric((int) (Math.random() * 20)));
+		}
+		while (valSet.size() < SIZE * 6) {
+			valSet.add(RandomStringUtils.randomNumeric((int) (Math.random() * 20)) + RandomStringUtils.randomAlphabetic(1));
+		}
+		while (valSet.size() < SIZE * 8) {
+			valSet.add(RandomStringUtils.randomAscii((int) (Math.random() * 20)));
+		}
+		while (valSet.size() < SIZE * 10) {
+			valSet.add(RandomStringUtils.random((int) (Math.random() * 20)));
 		}
 		int i = 0;
 		for (final Integer v : keySet) {
@@ -199,7 +207,7 @@ public class IntDelegatingChainedMapBaseXTest extends TestCase {
 			assertEquals(vals[i], map.get(keys[i]));
 		}
 		// now check the final state
-		assertEquals(SIZE, map.size());
+		assertEquals(10 * SIZE, map.size());
 		for (i = 0; i < vals.length; ++i) {
 			assertEquals(vals[i], map.get(keys[i]));
 		}
