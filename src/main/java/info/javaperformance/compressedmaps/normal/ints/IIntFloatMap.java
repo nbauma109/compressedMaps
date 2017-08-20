@@ -23,8 +23,8 @@ package info.javaperformance.compressedmaps.normal.ints;
  * Common set of methods implemented by maps
  */
 public interface IIntFloatMap {
-    public float get( final int key );
-    public float put( final int key, final float value );
-    public float remove( final int key );
-    public long size();
+    float get( final int key );
+    float put( final int key, final float value );
+    float remove( final int key );
+    long size();
 }

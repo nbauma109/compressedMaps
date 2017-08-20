@@ -85,7 +85,7 @@ public class IntIntChainedMap implements IIntIntMap {
 
 	/**
 	 * Create a map with a given size, fill factor and key/value serializers
-	 * 
+	 *
 	 * @param size
 	 *            Expected map size
 	 * @param fillFactor
@@ -155,7 +155,7 @@ public class IntIntChainedMap implements IIntIntMap {
 	}
 
 	@Override
-	public int get(final int key) {
+	public synchronized int get(final int key) {
 		if (!m_data.select(getIndex(key, m_data.length()))) {
 			return NO_VALUE;
 		}
@@ -164,7 +164,7 @@ public class IntIntChainedMap implements IIntIntMap {
 	}
 
 	@Override
-	public int put(final int key, final int value) {
+	public synchronized int put(final int key, final int value) {
 		final int idx = getIndex(key, m_data.length());
 		// copy/update the chain
 		final UpdateResult res = addToChain(idx, key, value);
@@ -175,7 +175,7 @@ public class IntIntChainedMap implements IIntIntMap {
 
 	/**
 	 * Write a single entry bucket
-	 * 
+	 *
 	 * @param output
 	 *            Use this block for output (it has enough space)
 	 * @param key
@@ -197,7 +197,7 @@ public class IntIntChainedMap implements IIntIntMap {
 	/**
 	 * Add key/value to a given chain. A chain is locked during the operation,
 	 * so it can be safely updated. The result is written to m_data[index]
-	 * 
+	 *
 	 * @param index
 	 *            Bucket index
 	 * @param key
@@ -274,7 +274,7 @@ public class IntIntChainedMap implements IIntIntMap {
 	 * This is a special version of previous method which deals with chains
 	 * which require storing the chain length prior to the chain ( compared to
 	 * being encoded in the buckets ).
-	 * 
+	 *
 	 * @param index
 	 *            Key bucket
 	 * @param iter
@@ -375,7 +375,7 @@ public class IntIntChainedMap implements IIntIntMap {
 	 * null chain is returned with a valid retValue 3) removal of the last
 	 * element in the chain - in most cases only the chain length should be
 	 * updated
-	 * 
+	 *
 	 * @param key
 	 *            Key to remove
 	 * @param idx
@@ -448,7 +448,7 @@ public class IntIntChainedMap implements IIntIntMap {
 	 * the result, so it can return slightly incorrect values (including
 	 * negative ones). Calling this method to frequently may cause the
 	 * performance degradation of your code.
-	 * 
+	 *
 	 * @return The approximate current map size (temporarily may be negative)
 	 */
 	@Override
@@ -458,7 +458,7 @@ public class IntIntChainedMap implements IIntIntMap {
 
 	/**
 	 * Rehash the table.
-	 * 
+	 *
 	 * @param old
 	 *            Old bucket table
 	 */
@@ -501,7 +501,7 @@ public class IntIntChainedMap implements IIntIntMap {
 
 	/**
 	 * Get the bucket index for the given key
-	 * 
+	 *
 	 * @param key
 	 *            A key
 	 * @param tabSize
@@ -536,7 +536,7 @@ public class IntIntChainedMap implements IIntIntMap {
 		/**
 		 * Initialize an iterator by a buffer. This method will reads the number
 		 * of entries if the current bucket length = max length
-		 * 
+		 *
 		 * @param buf
 		 *            Byte buffer
 		 * @param data
@@ -552,7 +552,7 @@ public class IntIntChainedMap implements IIntIntMap {
 
 		/**
 		 * Check if there are any not read entries left in the bucket
-		 * 
+		 *
 		 * @return True if we can advance, false otherwise
 		 */
 		public boolean hasNext() {
@@ -583,7 +583,7 @@ public class IntIntChainedMap implements IIntIntMap {
 
 		/**
 		 * method for looking up a value for a given key.
-		 * 
+		 *
 		 * @param key
 		 *            Key to look up
 		 * @param noValue
@@ -668,7 +668,7 @@ public class IntIntChainedMap implements IIntIntMap {
 		 * Reset a writer (useful if you need to write multiple entries in one
 		 * method call). This method does not write the element count into the
 		 * bucket (caller should take care of it)
-		 * 
+		 *
 		 * @param buf
 		 *            Underlying byte buffer
 		 * @return this
@@ -680,7 +680,7 @@ public class IntIntChainedMap implements IIntIntMap {
 		/**
 		 * Reset a writer (useful if you need to write multiple entries in one
 		 * method call)
-		 * 
+		 *
 		 * @param buf
 		 *            Underlying byte buffer
 		 * @param elems
@@ -701,7 +701,7 @@ public class IntIntChainedMap implements IIntIntMap {
 
 		/**
 		 * Write a key-value pair
-		 * 
+		 *
 		 * @param k
 		 *            Key to write
 		 * @param v
@@ -726,7 +726,7 @@ public class IntIntChainedMap implements IIntIntMap {
 		/**
 		 * Helper method to transfer an entry from iterator to writer. We always
 		 * take the iterator key as a key.
-		 * 
+		 *
 		 * @param iter
 		 *            Iterator standing prior to a value
 		 */

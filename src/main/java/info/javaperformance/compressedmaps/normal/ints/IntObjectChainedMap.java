@@ -153,7 +153,7 @@ public class IntObjectChainedMap<V> implements IIntObjectMap<V> {
 	}
 
 	@Override
-	public V get(final int key) {
+	public synchronized V get(final int key) {
 		if (!m_data.select(getIndex(key, m_data.length()))) {
 			return NO_VALUE;
 		}
@@ -162,7 +162,7 @@ public class IntObjectChainedMap<V> implements IIntObjectMap<V> {
 	}
 
 	@Override
-	public V put(final int key, final V value) {
+	public synchronized V put(final int key, final V value) {
 		final int idx = getIndex(key, m_data.length());
 		// copy/update the chain
 		final UpdateResult<V> res = addToChain(idx, key, value);
