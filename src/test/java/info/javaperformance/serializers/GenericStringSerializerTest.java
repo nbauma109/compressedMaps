@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 
 public class GenericStringSerializerTest extends TestCase {
 	public void testConcurrent() throws InterruptedException {
-		final int THREADS = 32;
+		final int THREADS = 16;
 		final GenericStringSerializer s = new GenericStringSerializer(StandardCharsets.UTF_8);
 		final CountDownLatch start = new CountDownLatch(THREADS);
 		final CountDownLatch end = new CountDownLatch(THREADS);
@@ -16,7 +16,7 @@ public class GenericStringSerializerTest extends TestCase {
 			final Runnable task = new Runnable() {
 				@Override
 				public void run() {
-					final ByteArray buf = new ByteArray().reset(new byte[1000000]);
+					final ByteArray buf = new ByteArray().reset(new byte[100000]);
 					start.countDown();
 					try {
 						start.await();
@@ -24,11 +24,11 @@ public class GenericStringSerializerTest extends TestCase {
 						e.printStackTrace();
 					}
 					buf.position(0);
-					for (int j = 0; j < 50000; ++j) {
+					for (int j = 0; j < 5000; ++j) {
 						s.write(id + String.valueOf(j), buf);
 					}
 					buf.position(0);
-					for (int j = 0; j < 10000; ++j) {
+					for (int j = 0; j < 1000; ++j) {
 						assertEquals(id + String.valueOf(j), s.read(buf));
 					}
 					end.countDown();
